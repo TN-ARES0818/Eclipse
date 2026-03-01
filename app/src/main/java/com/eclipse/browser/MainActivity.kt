@@ -16,7 +16,6 @@ import android.util.TypedValue
 import android.view.*
 import android.webkit.*
 import android.widget.*
-import com.example.eclipse.R
 import java.io.ByteArrayInputStream
 import java.net.HttpURLConnection
 import java.net.URL
@@ -523,7 +522,7 @@ class MainActivity : Activity() {
         @JavascriptInterface fun goBack() = runOnUiThread { if (activeWV.canGoBack()) activeWV.goBack() }
         @JavascriptInterface fun goForward() = runOnUiThread { if (activeWV.canGoForward()) activeWV.goForward() }
         @JavascriptInterface fun openIncognito() = runOnUiThread { enterIncognito() }
-        @JavascriptInterface fun exitIncognito() = runOnUiThread { exitIncognito() }
+        @JavascriptInterface fun exitIncognito() = runOnUiThread { this@MainActivity.exitIncognito() }
         @JavascriptInterface fun updateTabCount(count: Int) = runOnUiThread { setTabBadge(count) }
         @JavascriptInterface fun isIncognitoMode(): Boolean = isIncognito
         @JavascriptInterface fun getCurrentUrl(): String = activeWV.url ?: ""

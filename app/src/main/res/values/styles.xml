@@ -7,6 +7,14 @@
         <item name="android:navigationBarColor">#04040C</item>
     </style>
 
+    <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@android:color/black</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:navigationBarColor">#000000</item>
+        <item name="android:statusBarColor">@android:color/black</item>
+    </style>
+
     <style name="CustomBottomNav">
         <item name="android:background">@android:color/transparent</item>
     </style>

@@ -233,8 +233,8 @@ class SplashActivity : Activity() {
         TypedValue.COMPLEX_UNIT_DIP, v.toFloat(), resources.displayMetrics).toInt()
 
     // ── Inner class: animated star field ──────────────────────────────────
-    inner class StarFieldView(context: android.content.Context) : View(context) {
-        data class Star(var x: Float, var y: Float, val r: Float, val alpha: Float, val speed: Float)
+    class StarFieldView(context: android.content.Context) : View(context) {
+        class Star(var x: Float, var y: Float, val r: Float, val alpha: Float, val speed: Float)
         private val stars = mutableListOf<Star>()
         private val paint = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG).apply {
             color = Color.WHITE
@@ -245,7 +245,7 @@ class SplashActivity : Activity() {
                 stars.add(Star(
                     (Math.random() * 1080).toFloat(),
                     (Math.random() * 2400).toFloat(),
-                    (Math.random() * 1.8f + 0.3f),
+                    (Math.random() * 1.8f + 0.3f).toFloat(),
                     (Math.random() * 0.7f + 0.1f).toFloat(),
                     (Math.random() * 0.4f + 0.05f).toFloat()
                 ))
