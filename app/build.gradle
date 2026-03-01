@@ -7,15 +7,6 @@ android {
     namespace 'com.eclipse.browser'
     compileSdk 34
 
-    signingConfigs {
-        release {
-            storeFile file("${rootProject.projectDir}/eclipse-release.keystore")
-            storePassword "eclipse123"
-            keyAlias "eclipse"
-            keyPassword "eclipse123"
-        }
-    }
-
     defaultConfig {
         applicationId "com.eclipse.browser"
         minSdk 24
@@ -27,7 +18,6 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            signingConfig signingConfigs.release
         }
     }
 

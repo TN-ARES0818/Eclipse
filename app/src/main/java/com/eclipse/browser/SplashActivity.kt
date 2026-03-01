@@ -14,10 +14,10 @@ import android.view.animation.*
 import android.widget.*
 import kotlin.random.Random
 
+private data class Star(val x: Float, val y: Float, val r: Float, val alpha: Float)
+
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : Activity() {
-
-    private data class Star(val x: Float, val y: Float, val r: Float, val alpha: Float)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

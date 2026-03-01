@@ -430,3 +430,105 @@ html, body {
          border-radius:24px; padding:10px 20px; font-size:13px; color:var(--tx);
          z-index:500; opacity:0; pointer-events:none; transition:all .3s; white-space:nowrap; }
 .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+
+/* ═══════════════════════════════════════════════════════
+   DAWN 0.3 — WEATHER WIDGET
+   ═══════════════════════════════════════════════════════ */
+.weather-widget {
+  margin: 0 14px 8px;
+  background: var(--sf);
+  border: 1px solid var(--bd2);
+  border-radius: 18px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: background .2s;
+}
+.weather-widget:active { background: var(--sf2); }
+.wx-icon   { font-size: 32px; flex-shrink: 0; }
+.wx-info   { flex: 1; }
+.wx-temp   { font-size: 22px; font-weight: 500; color: var(--tx); line-height: 1; }
+.wx-unit   { font-size: 14px; color: var(--mt); }
+.wx-desc   { font-size: 11px; color: var(--mt); text-transform: capitalize; margin-top: 2px; }
+.wx-details { text-align: right; }
+.wx-city   { font-size: 12px; color: var(--ac); font-family: 'Space Mono',monospace; letter-spacing: 0.5px; }
+.wx-sub    { font-size: 10px; color: var(--mt2); margin-top: 3px; }
+
+/* ═══════════════════════════════════════════════════════
+   DAWN 0.5 — ABOUT ECLIPSE
+   ═══════════════════════════════════════════════════════ */
+.about-panel { max-height: 88vh; overflow-y: auto; }
+.about-logo-wrap { text-align: center; padding: 16px 0 8px; }
+.about-logo { width: 80px; height: 80px; object-fit: contain; border-radius: 20px; }
+.about-name { text-align: center; font-size: 22px; font-weight: 600; color: var(--tx); letter-spacing: 0.5px; }
+.about-version { text-align: center; font-size: 11px; color: var(--ac); font-family: 'Space Mono',monospace; letter-spacing: 1px; margin-top: 4px; text-transform: uppercase; }
+.about-tagline { text-align: center; font-size: 12px; color: var(--mt); margin-top: 4px; font-style: italic; }
+.about-divider { height: 1px; background: var(--bd2); margin: 14px 0; }
+.about-desc { font-size: 13px; color: var(--mt); line-height: 1.6; text-align: center; padding: 0 8px; }
+.about-stat-row { display: flex; justify-content: space-around; }
+.about-stat { text-align: center; }
+.about-stat-num { font-size: 24px; font-weight: 600; color: var(--ac); }
+.about-stat-label { font-size: 11px; color: var(--mt2); margin-top: 2px; }
+.about-credits-title { text-align: center; font-size: 11px; color: var(--mt2); }
+.about-credits-name  { text-align: center; font-size: 15px; color: var(--tx); margin-top: 4px; font-weight: 500; }
+.about-credits-sub   { text-align: center; font-size: 11px; color: var(--mt2); margin-top: 2px; }
+.about-roadmap-title { font-size: 12px; color: var(--mt2); font-family: 'Space Mono',monospace; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
+.about-roadmap-item  { font-size: 13px; color: var(--mt); padding: 6px 0; border-bottom: 1px solid var(--bd); }
+.about-btns { display: flex; gap: 10px; margin-top: 16px; }
+.about-btn-share {
+  flex: 1; padding: 12px; border-radius: 14px; border: 1px solid var(--ac);
+  background: rgba(232,200,64,0.1); color: var(--ac);
+  font-size: 14px; font-family: 'Outfit',sans-serif; cursor: pointer;
+}
+.about-btn-close {
+  flex: 1; padding: 12px; border-radius: 14px; border: none;
+  background: var(--ac); color: #000;
+  font-size: 14px; font-family: 'Outfit',sans-serif; font-weight: 500; cursor: pointer;
+}
+
+/* ═══════════════════════════════════════════════════════
+   DAWN 0.5 — ONBOARDING
+   ═══════════════════════════════════════════════════════ */
+.onboard-overlay {
+  position: fixed; inset: 0; z-index: 9999;
+  background: #000;
+  display: flex; align-items: center; justify-content: center;
+}
+.onboard-wrap {
+  width: 100%; max-width: 400px;
+  padding: 40px 28px 40px;
+  display: flex; flex-direction: column; align-items: center;
+  min-height: 100vh; justify-content: center;
+}
+.onboard-slides { width: 100%; position: relative; min-height: 280px; }
+.onboard-slide {
+  display: none; flex-direction: column; align-items: center;
+  text-align: center; animation: slideIn .35s ease;
+}
+.onboard-slide.active { display: flex; }
+@keyframes slideIn {
+  from { opacity:0; transform:translateX(30px); }
+  to   { opacity:1; transform:translateX(0); }
+}
+.onboard-logo  { font-size: 72px; margin-bottom: 24px; }
+.onboard-emoji { font-size: 60px; margin-bottom: 24px; }
+.onboard-title { font-size: 26px; font-weight: 600; color: #fff; margin-bottom: 14px; letter-spacing: 0.3px; }
+.onboard-sub   { font-size: 15px; color: rgba(255,255,255,0.55); line-height: 1.6; max-width: 300px; }
+.onboard-start-btn {
+  margin-top: 28px; padding: 16px 40px; background: var(--ac); color: #000;
+  border: none; border-radius: 16px; font-size: 16px; font-weight: 600;
+  font-family: 'Outfit',sans-serif; cursor: pointer; letter-spacing: 0.3px;
+}
+.onboard-dots  { display: flex; gap: 8px; margin: 28px 0 20px; }
+.onboard-dot   { width: 8px; height: 8px; border-radius: 4px; background: rgba(255,255,255,0.2); transition: all .3s; }
+.onboard-dot.active { width: 24px; background: var(--ac); }
+.onboard-nav   { display: flex; justify-content: space-between; width: 100%; align-items: center; }
+.onboard-skip  { background: none; border: none; color: rgba(255,255,255,0.35); font-size: 14px; font-family: 'Outfit',sans-serif; cursor: pointer; padding: 8px; }
+.onboard-next  {
+  background: var(--sf); border: 1px solid var(--bd2); color: var(--tx);
+  font-size: 14px; font-family: 'Outfit',sans-serif; cursor: pointer;
+  padding: 10px 22px; border-radius: 12px;
+}

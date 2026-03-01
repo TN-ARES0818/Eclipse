@@ -135,6 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
     startBgCanvas();
     setInterval(spawnParticle, 900);
     loadNews(false);
+    loadWeather();
     renderQuickSites();
     Music.init();
     const stats = Store.getAdStats();
@@ -235,7 +236,6 @@ function setSearchTab(el, tab) {
 }
 
 function doSearch() {
-  // Get query from whichever input is visible
   let q = '';
   if (App.isIncognito) {
     q = (document.getElementById('incogSearchInput')?.value || '').trim();
@@ -244,36 +244,25 @@ function doSearch() {
   }
   if (!q) return;
 
-  // Detect URL → open directly
+  // Direct URL — open it
   const isURL = /^(https?:\/\/|www\.)/i.test(q) ||
                 (q.includes('.') && !q.includes(' ') && q.length < 80);
   if (isURL) {
-    const url = q.startsWith('http') ? q : 'https://' + q;
-    openUrl(url);
+    openUrl(q.startsWith('http') ? q : 'https://' + q);
     return;
   }
 
-  // Build search URL using SELECTED engine
-  const engineKey = App.searchEngine || 'duckduckgo';
-  const base      = App.engines[engineKey]?.url || App.engines.duckduckgo.url;
-  let url         = base + encodeURIComponent(q);
-
-  // Tab modifiers (only DuckDuckGo supports these cleanly in URL)
-  if (engineKey === 'duckduckgo') {
-    if (App.activeSearchTab === 'news')   url += '&iar=news&ia=news';
-    if (App.activeSearchTab === 'images') url += '&iar=images&iax=images&ia=images';
-    if (App.activeSearchTab === 'videos') url += '&iar=videos&iax=videos&ia=videos';
-    if (App.activeSearchTab === 'ai')     url = 'https://duckduckgo.com/?q=' + encodeURIComponent(q) + '&ia=chat';
-  } else if (engineKey === 'google') {
-    if (App.activeSearchTab === 'news')   url += '&tbm=nws';
-    if (App.activeSearchTab === 'images') url += '&tbm=isch';
-    if (App.activeSearchTab === 'videos') url += '&tbm=vid';
-  } else if (engineKey === 'bing') {
-    if (App.activeSearchTab === 'images') url += '&qft=filterui:photo-photo';
-    if (App.activeSearchTab === 'videos') url += '&qft=filterui:video-video';
+  // AI tab — DuckDuckGo AI chat
+  if (App.activeSearchTab === 'ai') {
+    openUrl('https://duckduckgo.com/?q=' + encodeURIComponent(q) + '&ia=chat');
+    return;
   }
 
-  openUrl(url);
+  // ── Eclipse Search → results.html (Dawn 0.2) ─────────────────────
+  const tab = App.activeSearchTab || 'all';
+  const resultsUrl = 'file:///android_asset/results.html?q=' + encodeURIComponent(q) + '&tab=' + encodeURIComponent(tab);
+  try { Android.openUrl(resultsUrl); }
+  catch(e) { window.location.href = resultsUrl; }
 }
 
 // ── NAVIGATE — always via Android bridge so native nav stays ──────────────
@@ -850,9 +839,145 @@ function initDraggable(id) {
 }
 
 // ── UTILS ─────────────────────────────────────────────────────────────────
+
+// ── WEATHER WIDGET (Dawn 0.3) ────────────────────────────────────────
+const WEATHER_API_KEY = '01b6f7ef5529fb2a06c717f4df5ade5b';
+
+async function loadWeather() {
+  const widget = document.getElementById('weatherWidget');
+  if (!widget) return;
+
+  // Try cached first
+  const cached = sessionStorage.getItem('eclipse_weather');
+  const cachedTime = parseInt(sessionStorage.getItem('eclipse_weather_time') || '0');
+  if (cached && Date.now() - cachedTime < 30 * 60 * 1000) {
+    renderWeather(JSON.parse(cached));
+    return;
+  }
+
+  try {
+    // Get city from stored setting or default
+    const city = Store.getSetting('weatherCity', 'Delhi');
+    const url  = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${WEATHER_API_KEY}&units=metric`;
+    const raw  = await androidFetch(url);
+    const data = JSON.parse(raw);
+
+    const weather = {
+      temp:    Math.round(data.main.temp),
+      feels:   Math.round(data.main.feels_like),
+      desc:    data.weather[0].description,
+      icon:    data.weather[0].id,
+      city:    data.name,
+      humidity: data.main.humidity,
+      wind:    Math.round(data.wind.speed),
+    };
+    sessionStorage.setItem('eclipse_weather', JSON.stringify(weather));
+    sessionStorage.setItem('eclipse_weather_time', Date.now().toString());
+    renderWeather(weather);
+  } catch(e) {
+    // Silent fail — just hide widget
+    if (widget) widget.style.display = 'none';
+  }
+}
+
+function renderWeather(w) {
+  const widget = document.getElementById('weatherWidget');
+  if (!widget) return;
+
+  const icon = getWeatherEmoji(w.icon);
+  widget.innerHTML = `
+    <div class="wx-icon">${icon}</div>
+    <div class="wx-info">
+      <div class="wx-temp">${w.temp}°<span class="wx-unit">C</span></div>
+      <div class="wx-desc">${w.desc}</div>
+    </div>
+    <div class="wx-details">
+      <div class="wx-city">${w.city}</div>
+      <div class="wx-sub">💧${w.humidity}% · 💨${w.wind}m/s</div>
+    </div>`;
+  widget.style.display = 'flex';
+  widget.onclick = () => showWeatherDetail(w);
+}
+
+function showWeatherDetail(w) {
+  showToast(`${w.city}: ${w.temp}°C, feels like ${w.feels}°C`);
+}
+
+function getWeatherEmoji(id) {
+  if (id >= 200 && id < 300) return '⛈';
+  if (id >= 300 && id < 400) return '🌦';
+  if (id >= 500 && id < 510) return '🌧';
+  if (id === 511)             return '🌨';
+  if (id >= 520 && id < 600) return '🌦';
+  if (id >= 600 && id < 700) return '❄️';
+  if (id >= 700 && id < 800) return '🌫';
+  if (id === 800)             return '☀️';
+  if (id === 801)             return '🌤';
+  if (id === 802)             return '⛅';
+  if (id >= 803)              return '☁️';
+  return '🌡';
+}
+
 function escHtml(str) {
   return String(str)
     .replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>')
     .replace(/&quot;/g,'"').replace(/&#39;/g,"'")
     .replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
+
+// ── ABOUT ECLIPSE (Dawn 0.5) ─────────────────────────────────────────
+function openAbout()  { document.getElementById('aboutOverlay').classList.add('open'); }
+function closeAbout() { document.getElementById('aboutOverlay').classList.remove('open'); }
+
+function shareEclipse() {
+  const msg = '🌑 Eclipse Browser — browse beyond. A privacy-first browser with beautiful UI, Eclipse Search, Void Mode and more. Try it now!';
+  try {
+    Android.shareText ? Android.shareText(msg) : navigator.share({ text: msg });
+  } catch(e) {
+    // Copy to clipboard fallback
+    try { navigator.clipboard.writeText(msg); showToast('Share text copied!'); } catch(e2) { showToast('Eclipse Browser — browse beyond'); }
+  }
+}
+
+// ── ONBOARDING (Dawn 0.5) ─────────────────────────────────────────────
+let _onboardSlide = 0;
+const TOTAL_SLIDES = 5;
+
+function checkOnboarding() {
+  const seen = Store.getSetting('onboarding_done', false);
+  if (!seen) {
+    setTimeout(() => {
+      const overlay = document.getElementById('onboardOverlay');
+      if (overlay) overlay.style.display = 'flex';
+    }, 600);
+  }
+}
+
+function nextSlide() {
+  const slides = document.querySelectorAll('.onboard-slide');
+  const dots   = document.querySelectorAll('.onboard-dot');
+  const nextBtn = document.querySelector('.onboard-next');
+
+  slides[_onboardSlide].classList.remove('active');
+  dots[_onboardSlide].classList.remove('active');
+
+  _onboardSlide = Math.min(_onboardSlide + 1, TOTAL_SLIDES - 1);
+
+  slides[_onboardSlide].classList.add('active');
+  dots[_onboardSlide].classList.add('active');
+
+  if (_onboardSlide === TOTAL_SLIDES - 1 && nextBtn) {
+    nextBtn.style.display = 'none';
+  }
+}
+
+function finishOnboarding() {
+  const overlay = document.getElementById('onboardOverlay');
+  if (overlay) overlay.style.display = 'none';
+  Store.saveSetting('onboarding_done', true);
+}
+
+// Call checkOnboarding after DOM loads — add to DOMContentLoaded
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(checkOnboarding, 800);
+});

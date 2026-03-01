@@ -64,6 +64,9 @@
       </div>
     </div>
 
+    <!-- WEATHER WIDGET (Dawn 0.3) -->
+    <div class="weather-widget fu" id="weatherWidget" style="display:none"></div>
+
     <!-- SEARCH -->
     <div class="search-wrap fu fu2">
       <div class="search-row">
@@ -241,6 +244,9 @@
     <div class="menu-separator"></div>
     <div class="menu-item" onclick="closeMenu();openCustomize()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93A10 10 0 1 1 4.93 19.07"/></svg>Customize</div>
     <div class="menu-item menu-item-sm" onclick="closeMenu();Store.clearHistory();showToast('History cleared')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>Clear History</div>
+    <div class="menu-separator"></div>
+    <div class="menu-item" onclick="closeMenu();shareEclipse()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>Share Eclipse</div>
+    <div class="menu-item" onclick="closeMenu();openAbout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>About Eclipse</div>
     <button class="menu-done-btn" onclick="closeMenu()">Done</button>
   </div>
 </div>
@@ -333,6 +339,92 @@
     <div class="modal-body" id="modalBody"></div>
     <div class="modal-inputs" id="modalInputs"></div>
     <div class="modal-actions" id="modalActions"></div>
+  </div>
+</div>
+
+<!-- ══ ABOUT ECLIPSE (Dawn 0.5) ═════════════════════════════════════ -->
+<div class="overlay" id="aboutOverlay" onclick="if(event.target===this)closeAbout()">
+  <div class="cp-panel about-panel">
+    <div class="cp-header">🌑 About Eclipse <span class="cp-close" onclick="closeAbout()">✕</span></div>
+    <div class="about-logo-wrap">
+      <img src="eclipse_logo.png" class="about-logo" onerror="this.style.display='none'">
+    </div>
+    <div class="about-name">Eclipse Browser</div>
+    <div class="about-version">Dawn 0.5 — The First Light Series</div>
+    <div class="about-tagline">browse beyond</div>
+    <div class="about-divider"></div>
+    <div class="about-desc">Eclipse is a privacy-first browser built by one developer with a vision — to create a browser that feels like the future. Independent search, AI intelligence, full customization, and a growing community.</div>
+    <div class="about-divider"></div>
+    <div class="about-stat-row">
+      <div class="about-stat"><div class="about-stat-num">784+</div><div class="about-stat-label">Users</div></div>
+      <div class="about-stat"><div class="about-stat-num">5</div><div class="about-stat-label">Updates</div></div>
+      <div class="about-stat"><div class="about-stat-num">∞</div><div class="about-stat-label">Vision</div></div>
+    </div>
+    <div class="about-divider"></div>
+    <div class="about-credits-title">Built with 🌑 by</div>
+    <div class="about-credits-name">Eclipse Dev Team</div>
+    <div class="about-credits-sub">Dawn Series · 2025</div>
+    <div class="about-divider"></div>
+    <div class="about-roadmap-title">What's next</div>
+    <div class="about-roadmap-item">🔭 Umbra 1.0 — Launch Ready</div>
+    <div class="about-roadmap-item">🤖 Groq AI Integration</div>
+    <div class="about-roadmap-item">🌍 Eclipse Community</div>
+    <div class="about-roadmap-item">🔍 Eclipse Search Index</div>
+    <div class="about-btns">
+      <button class="about-btn-share" onclick="shareEclipse()">↗ Share Eclipse</button>
+      <button class="about-btn-close" onclick="closeAbout()">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ONBOARDING (Dawn 0.5) ════════════════════════════════════════ -->
+<div class="onboard-overlay" id="onboardOverlay" style="display:none">
+  <div class="onboard-wrap">
+    <div class="onboard-slides" id="onboardSlides">
+
+      <div class="onboard-slide active" id="slide0">
+        <div class="onboard-logo">🌑</div>
+        <div class="onboard-title">Welcome to Eclipse</div>
+        <div class="onboard-sub">A browser built for the future. Private, fast, and completely yours.</div>
+      </div>
+
+      <div class="onboard-slide" id="slide1">
+        <div class="onboard-emoji">🔍</div>
+        <div class="onboard-title">Eclipse Search</div>
+        <div class="onboard-sub">Search the web in your own UI. Results shown as beautiful Eclipse cards — no Google takeover.</div>
+      </div>
+
+      <div class="onboard-slide" id="slide2">
+        <div class="onboard-emoji">🎨</div>
+        <div class="onboard-title">Make It Yours</div>
+        <div class="onboard-sub">Change colors, themes, effects. Eclipse is the most customizable browser you'll ever use.</div>
+      </div>
+
+      <div class="onboard-slide" id="slide3">
+        <div class="onboard-emoji">🌑</div>
+        <div class="onboard-title">Void Mode</div>
+        <div class="onboard-sub">True incognito. No history, no traces, no tracking. You are completely invisible.</div>
+      </div>
+
+      <div class="onboard-slide" id="slide4">
+        <div class="onboard-emoji">🚀</div>
+        <div class="onboard-title">Let's Go, Explorer</div>
+        <div class="onboard-sub">You're one of Eclipse's early adopters. The journey has just begun.</div>
+        <button class="onboard-start-btn" onclick="finishOnboarding()">Start Exploring →</button>
+      </div>
+
+    </div>
+    <div class="onboard-dots" id="onboardDots">
+      <div class="onboard-dot active"></div>
+      <div class="onboard-dot"></div>
+      <div class="onboard-dot"></div>
+      <div class="onboard-dot"></div>
+      <div class="onboard-dot"></div>
+    </div>
+    <div class="onboard-nav">
+      <button class="onboard-skip" onclick="finishOnboarding()">Skip</button>
+      <button class="onboard-next" onclick="nextSlide()">Next →</button>
+    </div>
   </div>
 </div>
 
