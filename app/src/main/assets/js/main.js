@@ -7,6 +7,7 @@ const App = {
   adOn: true,
   adsBlocked: 0,
   trackersBlocked: 0,
+  searchEngine: 'duckduckgo',
   bgTheme: 'eclipse',
   particlesOn: true,
   starsOn: true,
@@ -17,6 +18,13 @@ const App = {
   activeTabId: 1,
   tabIdCounter: 1,
   isIncognito: false,
+
+  engines: {
+    duckduckgo: { url: 'https://html.duckduckgo.com/html/?q=',    label: 'DuckDuckGo' },
+    google:     { url: 'https://www.google.com/search?q=',        label: 'Google'     },
+    bing:       { url: 'https://www.bing.com/search?q=',          label: 'Bing'       },
+    brave:      { url: 'https://search.brave.com/search?q=',      label: 'Brave'      },
+  }
 };
 
 // ── DETECT incognito from URL hash ──────────────────────────────────────────
@@ -121,8 +129,6 @@ function androidFetch(url) {
 document.addEventListener('DOMContentLoaded', () => {
   detectMode();
   loadSettings();
-  Customize.init();
-  Weather.init();
 
   if (!App.isIncognito) {
     buildStars();
@@ -151,28 +157,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ── SETTINGS ──────────────────────────────────────────────────────────────
 function loadSettings() {
-  App.bgTheme = Store.getSetting('bgTheme', 'eclipse');
-  App.adOn = Store.getSetting('adOn', true);
-  App.particlesOn = Store.getSetting('particles', true);
-  App.starsOn = Store.getSetting('stars', true);
-  App.orbOn = Store.getSetting('orb', true);
+  App.searchEngine  = Store.getSetting('searchEngine', 'duckduckgo');
+  App.bgTheme       = Store.getSetting('bgTheme',      'eclipse');
+  App.adOn          = Store.getSetting('adOn',         true);
+  App.particlesOn   = Store.getSetting('particles',    true);
+  App.starsOn       = Store.getSetting('stars',        true);
+  App.orbOn         = Store.getSetting('orb',          true);
 
   if (!App.isIncognito) {
-      applyTheme(App.bgTheme);
-      applyStars(App.starsOn);
-      applyOrbVisibility(App.orbOn);
-
-      const newsOn = Store.getSetting('newsSection', true);
-      document.querySelector('.news-section').style.display = newsOn ? '' : 'none';
-
-      const sitesOn = Store.getSetting('sitesSection', true);
-      document.querySelector('.sites-section').style.display = sitesOn ? '' : 'none';
+    applyTheme(App.bgTheme);
+    applyStars(App.starsOn);
+    applyOrbVisibility(App.orbOn);
   }
 
-  const ac = Store.getSetting('accent', '#ff6b1a');
+  const ac  = Store.getSetting('accent',  '#ff6b1a');
   const ac2 = Store.getSetting('accent2', '#ffb347');
-  document.documentElement.style.setProperty('--ac', ac);
+  document.documentElement.style.setProperty('--ac',  ac);
   document.documentElement.style.setProperty('--ac2', ac2);
+
+  // mark selected search engine in customize panel
+  document.querySelectorAll('[data-se]').forEach(el => {
+    const active = el.dataset.se === App.searchEngine;
+    el.classList.toggle('active', active);
+    const chk = el.querySelector('.opt-check');
+    if (chk) chk.textContent = active ? '✓' : '';
+  });
 }
 
 function applyOrbVisibility(on) {
@@ -191,9 +200,24 @@ function updateClock() {
   const h12  = h % 12 || 12;
   const ce   = document.getElementById('clockDisplay');
   if (ce) ce.textContent = `${h12}:${m} ${ampm}`;
-  const greet = h < 5 ? 'night' : h < 12 ? 'morning' : h < 17 ? 'afternoon' : 'evening';
-  const ge = document.getElementById('greetWord');
-  if (ge) ge.textContent = greet;
+
+  // ── Fixed greeting ───────────────────────────────────────────────
+  const gm = document.getElementById('greetingMain');
+  if (gm) {
+    const ac = getComputedStyle(document.documentElement).getPropertyValue('--ac').trim() || '#ff6b1a';
+    const highlight = s => `<span class="greet-accent" style="color:${ac}">${s}</span>`;
+    if (h >= 5 && h < 12) {
+      gm.innerHTML = `Good ${highlight('Morning')}, Explorer`;
+    } else if (h >= 12 && h < 17) {
+      gm.innerHTML = `Good ${highlight('Afternoon')}, Explorer`;
+    } else if (h >= 17 && h < 21) {
+      gm.innerHTML = `Good ${highlight('Evening')}, Explorer`;
+    } else {
+      // Night: different message
+      gm.innerHTML = `What are you ${highlight('searching')} for lately, Explorer`;
+    }
+  }
+
   const days   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const de = document.getElementById('dateDisplay');
@@ -221,82 +245,36 @@ function doSearch() {
   if (!q) return;
 
   // Detect URL → open directly
-  const isURL = q.includes('.') && !q.includes(' ') && q.length < 80;
+  const isURL = /^(https?:\/\/|www\.)/i.test(q) ||
+                (q.includes('.') && !q.includes(' ') && q.length < 80);
   if (isURL) {
     const url = q.startsWith('http') ? q : 'https://' + q;
     openUrl(url);
     return;
   }
 
-  showSearchResults(q);
+  // Build search URL using SELECTED engine
+  const engineKey = App.searchEngine || 'duckduckgo';
+  const base      = App.engines[engineKey]?.url || App.engines.duckduckgo.url;
+  let url         = base + encodeURIComponent(q);
+
+  // Tab modifiers (only DuckDuckGo supports these cleanly in URL)
+  if (engineKey === 'duckduckgo') {
+    if (App.activeSearchTab === 'news')   url += '&iar=news&ia=news';
+    if (App.activeSearchTab === 'images') url += '&iar=images&iax=images&ia=images';
+    if (App.activeSearchTab === 'videos') url += '&iar=videos&iax=videos&ia=videos';
+    if (App.activeSearchTab === 'ai')     url = 'https://duckduckgo.com/?q=' + encodeURIComponent(q) + '&ia=chat';
+  } else if (engineKey === 'google') {
+    if (App.activeSearchTab === 'news')   url += '&tbm=nws';
+    if (App.activeSearchTab === 'images') url += '&tbm=isch';
+    if (App.activeSearchTab === 'videos') url += '&tbm=vid';
+  } else if (engineKey === 'bing') {
+    if (App.activeSearchTab === 'images') url += '&qft=filterui:photo-photo';
+    if (App.activeSearchTab === 'videos') url += '&qft=filterui:video-video';
+  }
+
+  openUrl(url);
 }
-
-function showSearchResults(query) {
-    document.getElementById('homeContent').style.display = 'none';
-    const resultsContainer = document.getElementById('resultsContent');
-    resultsContainer.style.display = '';
-    const searchInput = document.getElementById('searchInput');
-    if (searchInput) {
-        searchInput.value = query;
-    }
-    fetchAndRenderResults(query);
-}
-
-function flattenTopics(topics) {
-    let results = [];
-    if (!topics) return results;
-
-    topics.forEach(topic => {
-        if (topic.Topics) {
-            results = results.concat(flattenTopics(topic.Topics));
-        } else if (topic.FirstURL && topic.Text) {
-            results.push(topic);
-        }
-    });
-    return results;
-}
-
-function extractTextFromHTML(html) {
-    const temp = document.createElement('div');
-    temp.innerHTML = html;
-    const link = temp.querySelector('a');
-    if (link) link.remove();
-    return temp.textContent || temp.innerText || '';
-}
-
-async function fetchAndRenderResults(query) {
-    const resultsContainer = document.getElementById('resultsContent');
-    resultsContainer.innerHTML = '<div class="loading-results">Searching...</div>';
-
-    try {
-        const response = await androidFetch(`https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json&pretty=1`);
-        const data = JSON.parse(response);
-        resultsContainer.innerHTML = ''; // Clear loading message
-
-        const results = flattenTopics(data.RelatedTopics);
-
-        if (results.length > 0) {
-            results.forEach((result, index) => {
-                const card = document.createElement('div');
-                card.className = 'result-card';
-                card.style.animationDelay = `${index * 0.05}s`;
-                const desc = extractTextFromHTML(result.Result);
-                card.innerHTML = `
-                    <div class="result-title">${result.Text}</div>
-                    <div class="result-url">${result.FirstURL}</div>
-                    <div class="result-desc">${desc}</div>
-                `;
-                card.addEventListener('click', () => openUrl(result.FirstURL));
-                resultsContainer.appendChild(card);
-            });
-        } else {
-            resultsContainer.innerHTML = '<div class="no-results">No results found.</div>';
-        }
-    } catch (error) {
-        resultsContainer.innerHTML = `<div class="error-results">Error: ${error.message}</div>`;
-    }
-}
-
 
 // ── NAVIGATE — always via Android bridge so native nav stays ──────────────
 function openUrl(url) {
@@ -319,14 +297,13 @@ function navHome() {
   const tab = App.tabs.find(t => t.id === App.activeTabId);
   if (tab) { tab.url = 'home'; tab.title = 'New Tab'; Store.saveTabs(App.tabs); }
   try { Android.goHome(); } catch(e) {}
-    document.getElementById('resultsContent').style.display = 'none';
-    document.getElementById('homeContent').style.display = '';
 }
 
 // Called by native goHome when already on home page (to reset state)
 function onHomeLoaded() {
   const input = document.getElementById('searchInput');
   if (input) input.value = '';
+  updateClock(); // refresh greeting
 }
 
 // ── EXIT INCOGNITO ────────────────────────────────────────────────────────
@@ -617,6 +594,7 @@ function setAccent(c1, c2, el) {
   document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
   el.classList.add('active');
   Store.saveSetting('accent', c1); Store.saveSetting('accent2', c2);
+  updateClock(); // refresh greeting highlight color
 }
 
 function setTheme(theme, el) {
@@ -649,100 +627,101 @@ function toggleOrb(el) {
   Store.saveSetting('orb', App.orbOn);
 }
 
+function setSearchEngine(se, el) {
+  App.searchEngine = se;
+  Store.saveSetting('searchEngine', se);
+  document.querySelectorAll('[data-se]').forEach(e => {
+    e.classList.remove('active');
+    const chk = e.querySelector('.opt-check'); if (chk) chk.textContent = '';
+  });
+  el.classList.add('active');
+  const chk = el.querySelector('.opt-check'); if (chk) chk.textContent = '✓';
+  showToast(`Search: ${App.engines[se]?.label || se}`);
+}
+
+// ── NEWS SOURCES ──────────────────────────────────────────────────────────
+const NEWS_SOURCES = [
+  { url: 'https://feeds.bbci.co.uk/news/world/rss.xml',               label: 'BBC World'   },
+  { url: 'https://feeds.bbci.co.uk/news/technology/rss.xml',          label: 'BBC Tech'    },
+  { url: 'https://feeds.bbci.co.uk/news/science_and_environment/rss.xml', label: 'BBC Science' },
+  { url: 'https://feeds.skynews.com/feeds/rss/world.xml',             label: 'Sky News'    },
+  { url: 'https://www.aljazeera.com/xml/rss/all.xml',                 label: 'Al Jazeera'  },
+  { url: 'https://techcrunch.com/feed/',                              label: 'TechCrunch'  },
+  { url: 'https://www.theverge.com/rss/index.xml',                    label: 'The Verge'   },
+  { url: 'https://feeds.bbci.co.uk/news/health/rss.xml',              label: 'BBC Health'  },
+];
+let _newsIdx = Math.floor(Math.random() * NEWS_SOURCES.length);
 
 // ── LIVE NEWS ─────────────────────────────────────────────────────────────
 async function loadNews(forceRefresh) {
   const container = document.getElementById('newsCards');
   if (!container) return;
 
-  // Force refresh: always clear cache
   if (forceRefresh) {
+    _newsIdx = (_newsIdx + 1) % NEWS_SOURCES.length;
     sessionStorage.removeItem('eclipse_news_cache');
     sessionStorage.removeItem('eclipse_news_time');
+    sessionStorage.removeItem('eclipse_news_src');
   }
 
   const cached     = sessionStorage.getItem('eclipse_news_cache');
   const cachedTime = parseInt(sessionStorage.getItem('eclipse_news_time') || '0');
-  if (cached && Date.now() - cachedTime < 4 * 60 * 1000) {
-    renderNewsCards(JSON.parse(cached)); return;
+  const cachedSrc  = sessionStorage.getItem('eclipse_news_src') || '';
+
+  if (!forceRefresh && cached && Date.now() - cachedTime < 10 * 60 * 1000) {
+    renderNewsCards(JSON.parse(cached), cachedSrc); return;
   }
 
   container.innerHTML = '<div class="news-loading"><span class="spinner-news">◌</span> Loading...</div>';
+  const src = NEWS_SOURCES[_newsIdx];
 
-  // Try multiple RSS sources in order
-  const feeds = [
-    'https://feeds.bbci.co.uk/news/world/rss.xml',
-    'https://rss.nytimes.com/services/xml/rss/nyt/World.xml',
-    'https://feeds.reuters.com/reuters/worldNews',
-  ];
+  try {
+    const xml  = await androidFetch(src.url);
+    const doc  = new DOMParser().parseFromString(xml, 'application/xml');
+    const news = [...doc.querySelectorAll('item, entry')].slice(0, 12).map(item => {
+      const raw = item.querySelector('title')?.textContent || '';
+      const title = raw.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&#39;/g,"'").replace(/&quot;/g,'"').trim();
+      const link  = item.querySelector('link')?.textContent
+                 || item.querySelector('link')?.getAttribute?.('href')
+                 || item.querySelector('guid')?.textContent || '#';
+      const pubDate = item.querySelector('pubDate,published,updated')?.textContent || '';
+      let thumb = '';
+      const mt = item.getElementsByTagNameNS('*','thumbnail')[0];
+      if (mt) thumb = mt.getAttribute('url') || '';
+      if (!thumb) { const enc = item.querySelector('enclosure'); if (enc) thumb = enc.getAttribute('url') || ''; }
+      let timeAgo = '';
+      if (pubDate) {
+        const diff = Math.floor((Date.now() - new Date(pubDate).getTime()) / 1000);
+        timeAgo = diff < 3600 ? `${Math.max(1,Math.floor(diff/60))}m ago`
+                : diff < 86400 ? `${Math.floor(diff/3600)}h ago`
+                : `${Math.floor(diff/86400)}d ago`;
+      }
+      return { title, link, thumb, timeAgo };
+    }).filter(n => n.title.length > 3);
 
-  let news = null;
-  for (const feedUrl of feeds) {
-    try {
-      // Add cache-busting param so we always get fresh feed
-      const bustUrl = feedUrl + (feedUrl.includes('?') ? '&' : '?') + '_t=' + Date.now();
-      const xml = await androidFetch(bustUrl);
-      const doc  = new DOMParser().parseFromString(xml, 'text/xml');
-      const items = [...doc.querySelectorAll('item')].slice(0, 8);
-      if (items.length === 0) continue;
-      news = items.map(item => {
-        const title   = item.querySelector('title')?.textContent?.replace('<![CDATA[','').replace(']]>','') || '';
-        const link    = item.querySelector('link')?.textContent || item.querySelector('guid')?.textContent || '#';
-        const pubDate = item.querySelector('pubDate')?.textContent || '';
-        let thumb = '';
-        const mt = item.getElementsByTagNameNS('*','thumbnail')[0];
-        if (mt) thumb = mt.getAttribute('url') || '';
-        if (!thumb) {
-          const enc = item.querySelector('enclosure');
-          if (enc && enc.getAttribute('type')?.startsWith('image')) thumb = enc.getAttribute('url') || '';
-        }
-        if (!thumb) {
-          // Try media:content
-          const mc = item.getElementsByTagNameNS('*','content')[0];
-          if (mc) thumb = mc.getAttribute('url') || '';
-        }
-        let timeAgo = '';
-        if (pubDate) {
-          const diff = Math.floor((Date.now() - new Date(pubDate).getTime()) / 1000);
-          if (diff < 60) timeAgo = `${diff}s ago`;
-          else if (diff < 3600) timeAgo = `${Math.floor(diff/60)}m ago`;
-          else if (diff < 86400) timeAgo = `${Math.floor(diff/3600)}h ago`;
-          else timeAgo = `${Math.floor(diff/86400)}d ago`;
-        }
-        return { title: title.trim(), link, thumb, timeAgo };
-      }).filter(n => n.title.length > 3);
-      if (news.length > 0) break;
-    } catch(e) { /* try next source */ }
-  }
-
-  if (news && news.length > 0) {
+    if (!news.length) throw new Error('empty');
     sessionStorage.setItem('eclipse_news_cache', JSON.stringify(news));
     sessionStorage.setItem('eclipse_news_time',  Date.now().toString());
-    renderNewsCards(news);
-  } else {
+    sessionStorage.setItem('eclipse_news_src',   src.label);
+    renderNewsCards(news, src.label);
+  } catch(e) {
+    _newsIdx = (_newsIdx + 1) % NEWS_SOURCES.length;
     container.innerHTML = `<div class="news-error" onclick="loadNews(true)">⚠ Tap to retry</div>`;
   }
 }
 
-function renderNewsCards(news) {
+function renderNewsCards(news, srcLabel) {
   const container = document.getElementById('newsCards');
   if (!container) return;
   container.innerHTML = '';
   news.forEach(item => {
     const card = document.createElement('div');
     card.className = 'news-card';
-    // Horizontal card: image on top, text below
     card.innerHTML = `
-      <div class="news-card-thumb">
-        ${item.thumb
-          ? `<img src="${item.thumb}" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='📰'">`
-          : '📰'}
-      </div>
-      <div class="news-card-body">
-        <div class="news-card-source">BBC · World</div>
-        <div class="news-card-title">${escHtml(item.title)}</div>
-        <div class="news-card-time">${item.timeAgo}</div>
-      </div>`;
+      <div class="news-card-thumb">${item.thumb ? `<img src="${item.thumb}" loading="lazy" onerror="this.parentElement.innerHTML='📰'">` : '📰'}</div>
+      <div class="news-card-source">${escHtml(srcLabel || 'News')}</div>
+      <div class="news-card-title">${escHtml(item.title)}</div>
+      <div class="news-card-time">${item.timeAgo || 'Recent'}</div>`;
     card.addEventListener('click', () => openUrl(item.link));
     container.appendChild(card);
   });

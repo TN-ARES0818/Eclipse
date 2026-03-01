@@ -29,11 +29,8 @@
       <div class="hero-inner">
         <div class="hero-text">
           <div class="greeting-sub" id="dateDisplay">Loading...</div>
-          <div class="greeting-main">Good<span id="greetWord" class="greet-accent">searching</span>,Explorer!</div>
-          <div class="bottom-hero-row">
-            <div class="clock-time" id="clockDisplay">--:-- --</div>
-            <div class="weather-widget" id="weatherWidget" style="display: none;"></div>
-          </div>
+          <div class="greeting-main" id="greetingMain">Good <span class="greet-accent">Morning</span>, Explorer</div>
+          <div class="clock-time" id="clockDisplay">--:-- --</div>
         </div>
         <div class="eclipse-orb-wrap" id="crescentWrap">
           <div class="eclipse-orb">
@@ -96,7 +93,7 @@
 
     <!-- LIVE NEWS -->
     <div class="news-section fu fu4">
-      <div class="news-section-head">
+      <div class="section-head-row">
         <span class="section-label">Live News</span>
         <span class="news-refresh-btn" onclick="loadNews(true)">↻ Refresh</span>
       </div>
@@ -182,18 +179,6 @@
       </button>
     </div>
   </div>
-  
-  <!-- ══ SEARCH RESULTS ══════════════════════════════════════════ -->
-  <div id="resultsContent" class="home-scroll" style="display:none;">
-    <div class="filter-tabs fu fu3">
-      <div class="tab-chip active" onclick="setSearchTab(this,'all')">🌐 All</div>
-      <div class="tab-chip" onclick="setSearchTab(this,'news')">📰 News</div>
-      <div class="tab-chip" onclick="setSearchTab(this,'images')">🖼️ Images</div>
-      <div class="tab-chip" onclick="setSearchTab(this,'videos')">▶️ Videos</div>
-      <div class="tab-chip" onclick="setSearchTab(this,'ai')">✦ AI</div>
-    </div>
-    <!-- Search results will be dynamically inserted below -->
-  </div>
 
 </div><!-- end .app-layout -->
 
@@ -254,47 +239,50 @@
     <div class="menu-item" onclick="openBookmarks()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>Bookmarks</div>
     <div class="menu-item" onclick="closeMenu();addBookmarkCurrent()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/><path d="M12 8v8M8 12h8" stroke="currentColor"/></svg>Add Bookmark</div>
     <div class="menu-separator"></div>
-    <div class="menu-item" onclick="closeMenu();Customize.open()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93A10 10 0 1 1 4.93 19.07"/></svg>Customize</div>
+    <div class="menu-item" onclick="closeMenu();openCustomize()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93A10 10 0 1 1 4.93 19.07"/></svg>Customize</div>
     <div class="menu-item menu-item-sm" onclick="closeMenu();Store.clearHistory();showToast('History cleared')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>Clear History</div>
     <button class="menu-done-btn" onclick="closeMenu()">Done</button>
   </div>
 </div>
 
 <!-- ══ CUSTOMIZE ══════════════════════════════════════════════════ -->
-<div class="overlay" id="cpOverlay" onclick="if(event.target===this)Customize.close()">
+<div class="overlay" id="cpOverlay" onclick="if(event.target===this)closeCustomize()">
   <div class="cp-panel">
-    <div class="cp-header">◈ Customize <span class="cp-close" onclick="Customize.close()">✕</span></div>
+    <div class="cp-header">◈ Customize <span class="cp-close" onclick="closeCustomize()">✕</span></div>
     <div class="cp-section">
       <div class="cp-label">Accent Color</div>
       <div class="color-row">
-        <div class="color-swatch active" style="background:linear-gradient(135deg,#ff6b1a,#c23d00)" onclick="Customize.setAccent('#ff6b1a','#ffb347',this)"></div>
-        <div class="color-swatch" style="background:linear-gradient(135deg,#6c63ff,#3730d9)" onclick="Customize.setAccent('#6c63ff','#9d99ff',this)"></div>
-        <div class="color-swatch" style="background:linear-gradient(135deg,#00d4aa,#007a5e)" onclick="Customize.setAccent('#00d4aa','#5fffd9',this)"></div>
-        <div class="color-swatch" style="background:linear-gradient(135deg,#ff3d9a,#c0006e)" onclick="Customize.setAccent('#ff3d9a','#ff85c2',this)"></div>
-        <div class="color-swatch" style="background:linear-gradient(135deg,#ffd700,#b8860b)" onclick="Customize.setAccent('#ffd700','#ffe966',this)"></div>
-        <div class="color-swatch" style="background:linear-gradient(135deg,#00cfff,#006fa1)" onclick="Customize.setAccent('#00cfff','#7fe8ff',this)"></div>
+        <div class="color-swatch active" style="background:linear-gradient(135deg,#ff6b1a,#c23d00)" onclick="setAccent('#ff6b1a','#ffb347',this)"></div>
+        <div class="color-swatch" style="background:linear-gradient(135deg,#6c63ff,#3730d9)" onclick="setAccent('#6c63ff','#9d99ff',this)"></div>
+        <div class="color-swatch" style="background:linear-gradient(135deg,#00d4aa,#007a5e)" onclick="setAccent('#00d4aa','#5fffd9',this)"></div>
+        <div class="color-swatch" style="background:linear-gradient(135deg,#ff3d9a,#c0006e)" onclick="setAccent('#ff3d9a','#ff85c2',this)"></div>
+        <div class="color-swatch" style="background:linear-gradient(135deg,#ffd700,#b8860b)" onclick="setAccent('#ffd700','#ffe966',this)"></div>
+        <div class="color-swatch" style="background:linear-gradient(135deg,#00cfff,#006fa1)" onclick="setAccent('#00cfff','#7fe8ff',this)"></div>
       </div>
     </div>
     <div class="cp-section">
       <div class="cp-label">Background</div>
       <div class="theme-opts">
-        <div class="theme-opt active" onclick="Customize.setTheme('eclipse',this)"><span>🌑 Eclipse</span><div class="opt-check">✓</div></div>
-        <div class="theme-opt" onclick="Customize.setTheme('nebula',this)"><span>🌌 Nebula</span><div class="opt-check"></div></div>
-        <div class="theme-opt" onclick="Customize.setTheme('aurora',this)"><span>🌿 Aurora</span><div class="opt-check"></div></div>
-        <div class="theme-opt" onclick="Customize.setTheme('void',this)"><span>⬛ Pure Void</span><div class="opt-check"></div></div>
+        <div class="theme-opt active" onclick="setTheme('eclipse',this)"><span>🌑 Eclipse</span><div class="opt-check">✓</div></div>
+        <div class="theme-opt" onclick="setTheme('nebula',this)"><span>🌌 Nebula</span><div class="opt-check"></div></div>
+        <div class="theme-opt" onclick="setTheme('aurora',this)"><span>🌿 Aurora</span><div class="opt-check"></div></div>
+        <div class="theme-opt" onclick="setTheme('void',this)"><span>⬛ Pure Void</span><div class="opt-check"></div></div>
       </div>
     </div>
     <div class="cp-section">
       <div class="cp-label">Visual Effects</div>
-      <div class="toggle-row"><span>Floating Particles</span><div class="tog on" id="toggleParticles" onclick="Customize.toggleParticles(this)"></div></div>
-      <div class="toggle-row"><span>Star Field</span><div class="tog on" id="toggleStars" onclick="Customize.toggleStars(this)"></div></div>
-      <div class="toggle-row"><span>Eclipse Orb</span><div class="tog on" id="toggleOrb" onclick="Customize.toggleOrb(this)"></div></div>
+      <div class="toggle-row"><span>Floating Particles</span><div class="tog on" onclick="toggleParticles(this)"></div></div>
+      <div class="toggle-row"><span>Star Field</span><div class="tog on" onclick="toggleStars(this)"></div></div>
+      <div class="toggle-row"><span>Eclipse Orb</span><div class="tog on" id="togOrb" onclick="toggleOrb(this)"></div></div>
     </div>
     <div class="cp-section">
-        <div class="cp-label">Home Screen</div>
-        <div class="toggle-row"><span>Weather Widget</span><div class="tog" id="toggleWeather" onclick="Customize.toggleWeather(this)"></div></div>
-        <div class="toggle-row"><span>Live News</span><div class="tog on" id="toggleNews" onclick="Customize.toggleNews(this)"></div></div>
-        <div class="toggle-row"><span>Quick Access</span><div class="tog on" id="toggleSites" onclick="Customize.toggleSites(this)"></div></div>
+      <div class="cp-label">Search Engine</div>
+      <div class="se-opts">
+        <div class="se-opt active" data-se="duckduckgo" onclick="setSearchEngine('duckduckgo',this)"><span>🦆 DuckDuckGo</span><div class="opt-check">✓</div></div>
+        <div class="se-opt" data-se="google" onclick="setSearchEngine('google',this)"><span>🔍 Google</span><div class="opt-check"></div></div>
+        <div class="se-opt" data-se="bing" onclick="setSearchEngine('bing',this)"><span>🅱️ Bing</span><div class="opt-check"></div></div>
+        <div class="se-opt" data-se="brave" onclick="setSearchEngine('brave',this)"><span>🦁 Brave</span><div class="opt-check"></div></div>
+      </div>
     </div>
   </div>
 </div>
@@ -352,8 +340,6 @@
 
 <script src="js/storage.js"></script>
 <script src="js/music.js"></script>
-<script src="js/weather.js"></script>
-<script src="js/customize.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>
