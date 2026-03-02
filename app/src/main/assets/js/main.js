@@ -158,6 +158,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ── SETTINGS ──────────────────────────────────────────────────────────────
 function loadSettings() {
+  // Restore widget toggle states
+  const wxOn    = Store.getSetting('weatherOn', true);
+  const newsOn  = Store.getSetting('newsOn', true);
+  const sitesOn = Store.getSetting('sitesOn', true);
+
+  const togWx    = document.getElementById('togWeather');
+  const togNews  = document.getElementById('togNews');
+  const togSites = document.getElementById('togSites');
+
+  if (togWx    && !wxOn)    togWx.classList.remove('on');
+  if (togNews  && !newsOn)  togNews.classList.remove('on');
+  if (togSites && !sitesOn) togSites.classList.remove('on');
+
+  const newsSection  = document.querySelector('.news-section');
+  const sitesSection = document.querySelector('.sites-section');
+  if (newsSection  && !newsOn)  newsSection.style.display  = 'none';
+  if (sitesSection && !sitesOn) sitesSection.style.display = 'none';
+
   App.searchEngine  = Store.getSetting('searchEngine', 'duckduckgo');
   App.bgTheme       = Store.getSetting('bgTheme',      'eclipse');
   App.adOn          = Store.getSetting('adOn',         true);
@@ -876,27 +894,31 @@ async function loadWeather() {
     renderWeather(weather);
   } catch(e) {
     // Silent fail — just hide widget
-    if (widget) widget.style.display = 'none';
+    const inl = document.getElementById('weatherInline');
+    if (inl) inl.style.display = 'none';
   }
 }
 
 function renderWeather(w) {
-  const widget = document.getElementById('weatherWidget');
-  if (!widget) return;
+  // Inline weather in hero — minimal and clean
+  const inline = document.getElementById('weatherInline');
+  if (!inline) return;
+
+  // Check if weather widget is enabled
+  const wxOn = Store.getSetting('weatherOn', true);
+  if (!wxOn) { inline.style.display = 'none'; return; }
 
   const icon = getWeatherEmoji(w.icon);
-  widget.innerHTML = `
-    <div class="wx-icon">${icon}</div>
-    <div class="wx-info">
-      <div class="wx-temp">${w.temp}°<span class="wx-unit">C</span></div>
-      <div class="wx-desc">${w.desc}</div>
-    </div>
-    <div class="wx-details">
-      <div class="wx-city">${w.city}</div>
-      <div class="wx-sub">💧${w.humidity}% · 💨${w.wind}m/s</div>
-    </div>`;
-  widget.style.display = 'flex';
-  widget.onclick = () => showWeatherDetail(w);
+  inline.innerHTML = `
+    <span class="wi-icon">${icon}</span>
+    <span class="wi-text">${w.temp}°C · ${w.desc}</span>
+    <span class="wi-city">${w.city}</span>`;
+  inline.style.display = 'flex';
+  inline.onclick = () => showToast(\`Feels like ${w.feels}°C · 💧${w.humidity}% · 💨${w.wind}m/s\`);
+
+  // Also hide the old card widget if it exists
+  const card = document.getElementById('weatherWidget');
+  if (card) card.style.display = 'none';
 }
 
 function showWeatherDetail(w) {
@@ -916,6 +938,44 @@ function getWeatherEmoji(id) {
   if (id === 802)             return '⛅';
   if (id >= 803)              return '☁️';
   return '🌡';
+}
+
+// ── MUSIC BUBBLE — hide when search focused (Dawn 0.2 fix) ─────────────────
+function hideMusicBubble() {
+  const b = document.getElementById('musicBubble');
+  if (b) { b.style.opacity = '0'; b.style.pointerEvents = 'none'; b.style.transform = 'scale(0.8)'; b.style.transition = 'all 0.25s ease'; }
+}
+function showMusicBubble() {
+  setTimeout(() => {
+    const b = document.getElementById('musicBubble');
+    if (b) { b.style.opacity = '1'; b.style.pointerEvents = 'auto'; b.style.transform = 'scale(1)'; }
+  }, 400);
+}
+
+// ── WIDGET TOGGLES (Dawn 0.4) ─────────────────────────────────────────────
+function toggleWeather(el) {
+  el.classList.toggle('on');
+  const on = el.classList.contains('on');
+  Store.saveSetting('weatherOn', on);
+  const inline = document.getElementById('weatherInline');
+  if (inline) inline.style.display = on ? 'flex' : 'none';
+  if (on) loadWeather();
+}
+
+function toggleNewsWidget(el) {
+  el.classList.toggle('on');
+  const on = el.classList.contains('on');
+  Store.saveSetting('newsOn', on);
+  const sec = document.querySelector('.news-section');
+  if (sec) sec.style.display = on ? 'block' : 'none';
+}
+
+function toggleSitesWidget(el) {
+  el.classList.toggle('on');
+  const on = el.classList.contains('on');
+  Store.saveSetting('sitesOn', on);
+  const sec = document.querySelector('.sites-section');
+  if (sec) sec.style.display = on ? 'block' : 'none';
 }
 
 function escHtml(str) {

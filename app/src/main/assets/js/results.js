@@ -1,78 +1,76 @@
-// ════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════════════════
 // ECLIPSE RESULTS — results.js  Dawn 0.2
-// ════════════════════════════════════════════════════════
+// Smart SearXNG search with HTML detection and smart instance fallback
+// ════════════════════════════════════════════════════════════════════════════
 
-const SEARX_BASE = 'https://search.mdosch.de/search';
-const SEARX_FALLBACKS = [
-  'https://search.mdosch.de/search',
-  'https://searx.tiekoetter.com/search',
-  'https://searx.be/search',
+// ── SEARXNG INSTANCES ────────────────────────────────────────────────────
+const INSTANCES = [
+  'https://search.ononoki.org',
+  'https://searx.tiekoetter.com',
+  'https://searxng.world',
+  'https://sx.catgirl.cloud',
+  'https://searx.prvcy.eu',
+  'https://priv.au',
+  'https://searx.work',
+  'https://searx.be',
 ];
-let currentFallback = 0;
 
-const State = {
-  query:   '',
-  tab:     'all',
-  results: [],
-  loading: false,
-  error:   null,
-  totalResults: 0,
-  timeMs: 0,
+const failedInstances = new Set();
+let currentIdx = 0;
+
+const S = {
+  query: '', tab: 'all', results: [],
+  loading: false, total: 0, ms: 0,
 };
 
-// ── URL PARAMS ────────────────────────────────────────────────────────
-function getParams() {
-  const p = new URLSearchParams(window.location.search);
-  State.query = p.get('q') || '';
-  State.tab   = p.get('tab') || 'all';
-}
-
-// ── INIT ──────────────────────────────────────────────────────────────
+// ── INIT ──────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-  getParams();
-  if (!State.query) { showEmpty('Type something to search'); return; }
-
-  // Fill search bar
+  loadAccentColor();
+  parseUrlParams();
+  if (!S.query) { showEmpty('Type something to search'); return; }
   const inp = document.getElementById('resSearchInput');
-  if (inp) inp.value = State.query;
-
-  // Mark active tab
+  if (inp) inp.value = S.query;
   document.querySelectorAll('.res-tab').forEach(t => {
-    t.classList.toggle('active', t.dataset.tab === State.tab);
+    t.classList.toggle('active', t.dataset.tab === S.tab);
   });
+  fetchResults();
+});
 
-  // Load accent from storage
+function loadAccentColor() {
   try {
     const ac = localStorage.getItem('eclipse_accent') || '#E8C840';
     document.documentElement.style.setProperty('--ac', ac);
   } catch(e) {}
+}
 
-  fetchResults();
-});
+function parseUrlParams() {
+  try {
+    const p = new URLSearchParams(window.location.search);
+    S.query = decodeURIComponent(p.get('q') || '').trim();
+    S.tab   = p.get('tab') || 'all';
+  } catch(e) { S.query = ''; S.tab = 'all'; }
+}
 
-// ── TAB SWITCH ────────────────────────────────────────────────────────
 function switchTab(el, tab) {
+  if (S.loading) return;
   document.querySelectorAll('.res-tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
-  State.tab = tab;
+  S.tab = tab;
   fetchResults();
 }
 
-// ── RE-SEARCH ─────────────────────────────────────────────────────────
 function reSearch() {
   const inp = document.getElementById('resSearchInput');
-  const q   = inp?.value.trim();
+  const q   = (inp?.value || '').trim();
   if (!q) return;
-  State.query = q;
-
-  // Check if it's a URL
   const isURL = /^(https?:\/\/|www\.)/i.test(q) || (q.includes('.') && !q.includes(' ') && q.length < 80);
-  if (isURL) {
-    const url = q.startsWith('http') ? q : 'https://' + q;
-    try { Android.openUrl(url); } catch(e) { window.location.href = url; }
-    return;
-  }
-
+  if (isURL) { openResult(q.startsWith('http') ? q : 'https://' + q); return; }
+  S.query = q;
+  try {
+    const url = new URL(window.location.href);
+    url.searchParams.set('q', q);
+    window.history.replaceState({}, '', url.toString());
+  } catch(e) {}
   fetchResults();
 }
 
@@ -81,94 +79,256 @@ function clearSearch() {
   if (inp) { inp.value = ''; inp.focus(); }
 }
 
-// ── NAVIGATE BACK ──────────────────────────────────────────────────────
 function goBackToHome() {
-  try { Android.goHome(); } catch(e) {
-    try { Android.goBack(); } catch(e2) { history.back(); }
-  }
+  try { Android.goHome(); }
+  catch(e) { try { Android.goBack(); } catch(e2) { history.back(); } }
 }
 
-// ── FETCH RESULTS ─────────────────────────────────────────────────────
+// ── CORE FETCH WITH HTML DETECTION ───────────────────────────────────────
 async function fetchResults() {
-  if (!State.query) return;
-  State.loading = true;
-  State.error   = null;
-
+  if (!S.query || S.loading) return;
+  S.loading = true;
   showSkeletons();
-  document.getElementById('resMeta').textContent = '';
-  document.getElementById('resFooter').style.display = 'none';
+  setMeta('');
+  hideFooter();
 
-  const categories = tabToCategories(State.tab);
-  const url = `${SEARX_FALLBACKS[currentFallback]}?q=${encodeURIComponent(State.query)}&format=json&categories=${categories}&language=en`;
+  const t0  = Date.now();
+  let data   = null;
+  let lastErr = 'All search instances are currently unavailable';
 
-  const t0 = Date.now();
+  for (let attempt = 0; attempt < INSTANCES.length; attempt++) {
+    const idx = getNextGoodIdx();
+    if (idx === -1) break;
 
-  try {
-    const raw = await eclFetch(url);
-    const data = JSON.parse(raw);
-    State.timeMs = Date.now() - t0;
-    State.totalResults = data.number_of_results || 0;
-    State.results = data.results || [];
+    const base = INSTANCES[idx];
+    const cat  = tabToCategory(S.tab);
+    const url  = `${base}/search?q=${encodeURIComponent(S.query)}&format=json&categories=${cat}&language=en-US`;
 
-    if (State.tab === 'images') {
-      renderImages(State.results);
-    } else {
-      renderResults(State.results);
-    }
+    try {
+      const raw = await eclFetch(url, 13000);
 
-    const meta = document.getElementById('resMeta');
-    if (meta) {
-      meta.textContent = `${formatNum(State.totalResults)} results · ${State.timeMs}ms`;
-    }
+      // CRITICAL FIX: detect HTML response — means instance is blocking us
+      const trimmed = raw.trimStart();
+      if (trimmed.startsWith('<') || trimmed.startsWith('<!') || trimmed.toLowerCase().includes('<!doctype')) {
+        failedInstances.add(base);
+        currentIdx = (idx + 1) % INSTANCES.length;
+        continue;
+      }
 
-    const footer = document.getElementById('resFooter');
-    if (footer) footer.style.display = 'block';
+      // Try parse JSON
+      try {
+        data = JSON.parse(raw);
+        // Make sure it has results structure
+        if (typeof data !== 'object' || data === null) throw new Error('Invalid response structure');
+        currentIdx = idx;
+        break;
+      } catch(pe) {
+        failedInstances.add(base);
+        currentIdx = (idx + 1) % INSTANCES.length;
+        lastErr = 'Invalid response from ' + base;
+        continue;
+      }
 
-  } catch(e) {
-    // Try next fallback
-    if (currentFallback < SEARX_FALLBACKS.length - 1) {
-      currentFallback++;
-      fetchResults();
-    } else {
-      currentFallback = 0;
-      showError(e.message || 'Search failed');
+    } catch(fe) {
+      failedInstances.add(base);
+      currentIdx = (idx + 1) % INSTANCES.length;
+      lastErr = fe.message || 'Network error';
+      continue;
     }
   }
 
-  State.loading = false;
+  S.ms      = Date.now() - t0;
+  S.loading = false;
+
+  if (!data) {
+    failedInstances.clear(); // reset for next attempt
+    showError(lastErr);
+    return;
+  }
+
+  S.total   = data.number_of_results || 0;
+  S.results = data.results || [];
+
+  if (S.tab === 'images') renderImages(S.results);
+  else renderResults(S.results);
+
+  setMeta(`${fmtNum(S.total)} results · ${S.ms}ms`);
+  showFooter();
 }
 
-function tabToCategories(tab) {
-  switch(tab) {
-    case 'news':   return 'news';
-    case 'images': return 'images';
-    case 'videos': return 'videos';
-    default:       return 'general';
+function getNextGoodIdx() {
+  for (let i = 0; i < INSTANCES.length; i++) {
+    const idx = (currentIdx + i) % INSTANCES.length;
+    if (!failedInstances.has(INSTANCES[idx])) { currentIdx = idx; return idx; }
+  }
+  return -1;
+}
+
+function tabToCategory(tab) {
+  if (tab === 'news')   return 'news';
+  if (tab === 'images') return 'images';
+  if (tab === 'videos') return 'videos';
+  return 'general';
+}
+
+// ── RENDER RESULTS ────────────────────────────────────────────────────────
+function renderResults(results) {
+  const list = document.getElementById('resList');
+  const grid = document.getElementById('resImgGrid');
+  if (!list) return;
+  list.style.display = 'block';
+  if (grid) grid.style.display = 'none';
+  list.innerHTML = '';
+  if (!results || !results.length) { showEmpty('No results found for "' + S.query + '"'); return; }
+
+  results.forEach((item, i) => {
+    const card    = document.createElement('div');
+    card.className = 'res-card' + (S.tab === 'news' ? ' news-card-type' : '');
+    card.style.animationDelay = Math.min(i * 25, 300) + 'ms';
+
+    const domain  = getDomain(item.url);
+    const favicon = 'https://www.google.com/s2/favicons?domain=' + domain + '&sz=32';
+    const engines = (Array.isArray(item.engines) ? item.engines : [item.engine || '']).filter(Boolean);
+    const pub     = item.publishedDate ? fmtDate(item.publishedDate) : '';
+    const desc    = (item.content || '').replace(/\s+/g, ' ').trim();
+    const title   = deEnt(item.title || 'No title');
+    const engTag  = engines.length ? engines[0] : '';
+
+    card.innerHTML =
+      '<div class="res-card-top">' +
+        '<div class="res-favicon-wrap">' +
+          '<img class="res-favicon" src="' + esc(favicon) + '" loading="lazy" ' +
+          'onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'">' +
+          '<span class="res-favicon-fallback" style="display:none">🌐</span>' +
+        '</div>' +
+        '<span class="res-domain">' + esc(domain) + '</span>' +
+        (engTag ? '<span class="res-engine-tag">' + esc(engTag) + '</span>' : '') +
+      '</div>' +
+      '<div class="res-title">' + esc(title) + '</div>' +
+      (desc ? '<div class="res-desc">' + esc(desc) + '</div>' : '') +
+      (pub  ? '<div class="res-pub-date">📅 ' + pub + '</div>' : '') +
+      '<div class="res-url">' + esc(item.url || '') + '</div>';
+
+    card.addEventListener('click', () => openResult(item.url));
+    list.appendChild(card);
+  });
+}
+
+// ── RENDER IMAGES ─────────────────────────────────────────────────────────
+function renderImages(results) {
+  const list = document.getElementById('resList');
+  const grid = document.getElementById('resImgGrid');
+  if (!grid) { renderResults(results); return; }
+  if (list) list.style.display = 'none';
+  grid.style.display = 'grid';
+  grid.innerHTML = '';
+
+  const imgs = (results || []).filter(r => r.img_src || r.thumbnail);
+  if (!imgs.length) {
+    grid.style.display = 'none';
+    if (list) list.style.display = 'block';
+    showEmpty('No images found — try the All tab');
+    return;
+  }
+
+  imgs.forEach(item => {
+    const card  = document.createElement('div');
+    card.className = 'res-img-card';
+    const src   = item.thumbnail || item.img_src || '';
+    const title = deEnt(item.title || getDomain(item.url));
+    card.innerHTML =
+      '<img src="' + esc(src) + '" loading="lazy" ' +
+      'onerror="this.parentElement.style.display=\'none\'" alt="' + esc(title) + '">' +
+      '<div class="res-img-card-label">' + esc(title) + '</div>';
+    card.addEventListener('click', () => openResult(item.url));
+    grid.appendChild(card);
+  });
+}
+
+// ── SKELETONS ─────────────────────────────────────────────────────────────
+function showSkeletons(n) {
+  n = n || 7;
+  const list = document.getElementById('resList');
+  const grid = document.getElementById('resImgGrid');
+  if (!list) return;
+  list.style.display = 'block';
+  list.innerHTML = '';
+  if (grid) grid.style.display = 'none';
+  for (var i = 0; i < n; i++) {
+    var s = document.createElement('div');
+    s.className = 'res-skeleton';
+    s.style.animationDelay = (i * 40) + 'ms';
+    s.innerHTML = '<div class="skel-line skel-top"></div>' +
+      '<div class="skel-line skel-title"></div>' +
+      '<div class="skel-line skel-title2"></div>' +
+      '<div class="skel-line skel-desc"></div>' +
+      '<div class="skel-line skel-desc2"></div>';
+    list.appendChild(s);
   }
 }
 
-// ── ANDROID FETCH BRIDGE ──────────────────────────────────────────────
+// ── ERROR / EMPTY STATES ──────────────────────────────────────────────────
+function showError(msg) {
+  const list = document.getElementById('resList');
+  const grid = document.getElementById('resImgGrid');
+  if (list) list.style.display = 'block';
+  if (grid) grid.style.display = 'none';
+  if (!list) return;
+  list.innerHTML = '<div class="res-error">' +
+    '<div class="res-error-icon">⚠️</div>' +
+    '<div class="res-error-title">Search unavailable</div>' +
+    '<div class="res-error-sub">' + esc(msg) + '</div>' +
+    '<div class="res-error-hint">Check your internet connection and try again.</div>' +
+    '<button class="res-retry-btn" onclick="fetchResults()">Try Again</button>' +
+    '</div>';
+}
+
+function showEmpty(msg) {
+  const list = document.getElementById('resList');
+  const grid = document.getElementById('resImgGrid');
+  if (list) list.style.display = 'block';
+  if (grid) grid.style.display = 'none';
+  if (!list) return;
+  list.innerHTML = '<div class="res-empty">' +
+    '<div class="res-empty-icon">🔭</div>' +
+    '<div class="res-empty-title">' + esc(msg) + '</div>' +
+    '<div class="res-empty-sub">Try different keywords</div>' +
+    '</div>';
+}
+
+// ── UI HELPERS ────────────────────────────────────────────────────────────
+function setMeta(text) { var m = document.getElementById('resMeta'); if (m) m.textContent = text; }
+function showFooter()   { var f = document.getElementById('resFooter'); if (f) f.style.display = 'block'; }
+function hideFooter()   { var f = document.getElementById('resFooter'); if (f) f.style.display = 'none'; }
+
+function openResult(url) {
+  if (!url) return;
+  try { Android.openUrl(url); }
+  catch(e) { window.location.href = url; }
+}
+
+// ── ANDROID FETCH BRIDGE ──────────────────────────────────────────────────
 window._eclFetchCbs = {};
-window.EclFetchCallback = function(id, data, err) {
-  const cb = window._eclFetchCbs[id];
+window.EclFetchCallback = function(id, b64, err) {
+  var cb = window._eclFetchCbs[id];
   if (!cb) return;
   delete window._eclFetchCbs[id];
-  cb(data, err);
+  if (err) { cb(null, new Error(err)); return; }
+  try { cb(atob(b64), null); } catch(e) { cb(b64, null); }
 };
 
-function eclFetch(url) {
-  return new Promise((resolve, reject) => {
-    const id = 'r_' + Date.now() + '_' + Math.random().toString(36).slice(2);
-    const timer = setTimeout(() => {
+function eclFetch(url, ms) {
+  ms = ms || 14000;
+  return new Promise(function(resolve, reject) {
+    var id    = 'ecl_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+    var timer = setTimeout(function() {
       delete window._eclFetchCbs[id];
-      reject(new Error('Request timed out'));
-    }, 18000);
+      reject(new Error('Timed out'));
+    }, ms);
 
-    window._eclFetchCbs[id] = (data, err) => {
+    window._eclFetchCbs[id] = function(text, err) {
       clearTimeout(timer);
-      if (err) { reject(new Error(err)); return; }
-      try { resolve(atob(data)); }
-      catch(e) { resolve(data); }
+      if (err) { reject(err); } else { resolve(text); }
     };
 
     try {
@@ -176,180 +336,57 @@ function eclFetch(url) {
     } catch(e) {
       clearTimeout(timer);
       delete window._eclFetchCbs[id];
-      fetch(url, { signal: AbortSignal.timeout(16000) })
-        .then(r => r.text()).then(resolve).catch(reject);
+      var ctrl = new AbortController();
+      var t2   = setTimeout(function() { ctrl.abort(); }, ms);
+      fetch(url, { signal: ctrl.signal })
+        .then(function(r) { return r.text(); })
+        .then(function(txt) { clearTimeout(t2); resolve(txt); })
+        .catch(function(er) { clearTimeout(t2); reject(er); });
     }
   });
 }
 
-// ── RENDER RESULTS ────────────────────────────────────────────────────
-function renderResults(results) {
-  const list = document.getElementById('resList');
-  const grid = document.getElementById('resImgGrid');
-  if (!list) return;
-
-  list.style.display = 'block';
-  if (grid) grid.style.display = 'none';
-  list.innerHTML = '';
-
-  if (!results.length) {
-    showEmpty(`No results for "${State.query}"`);
-    return;
-  }
-
-  results.forEach((item, i) => {
-    const card = document.createElement('div');
-    card.className = 'res-card' + (State.tab === 'news' ? ' news-card-type' : '');
-    card.style.animationDelay = Math.min(i * 30, 300) + 'ms';
-
-    const domain  = getDomain(item.url);
-    const favicon = `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
-    const engines = (item.engines || [item.engine || '']).join(', ');
-    const pub     = item.publishedDate ? formatDate(item.publishedDate) : '';
-    const desc    = (item.content || '').replace(/\s+/g,' ').trim();
-
-    card.innerHTML = `
-      <div class="res-card-top">
-        <div class="res-favicon-wrap">
-          <img class="res-favicon" src="${favicon}"
-            onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" loading="lazy">
-          <span class="res-favicon-fallback" style="display:none">🌐</span>
-        </div>
-        <span class="res-domain">${escHtml(domain)}</span>
-        ${engines ? `<span class="res-engine-tag">${escHtml(engines.split(',')[0].trim())}</span>` : ''}
-      </div>
-      <div class="res-title">${escHtml(item.title || 'No title')}</div>
-      ${desc ? `<div class="res-desc">${escHtml(desc)}</div>` : ''}
-      ${pub  ? `<div class="res-pub-date">📅 ${pub}</div>` : ''}
-      <div class="res-url">${escHtml(item.url || '')}</div>`;
-
-    card.addEventListener('click', () => openResult(item.url));
-    list.appendChild(card);
-  });
-}
-
-// ── RENDER IMAGES ─────────────────────────────────────────────────────
-function renderImages(results) {
-  const list = document.getElementById('resList');
-  const grid = document.getElementById('resImgGrid');
-  if (!grid) return;
-
-  if (list) list.style.display = 'none';
-  grid.style.display = 'grid';
-  grid.innerHTML = '';
-
-  const imgResults = results.filter(r => r.img_src || r.thumbnail);
-  if (!imgResults.length) {
-    grid.style.display = 'none';
-    if (list) list.style.display = 'block';
-    showEmpty('No images found');
-    return;
-  }
-
-  imgResults.forEach(item => {
-    const card  = document.createElement('div');
-    card.className = 'res-img-card';
-    const thumb = item.thumbnail || item.img_src;
-    const title = item.title || getDomain(item.url);
-
-    card.innerHTML = `
-      <img src="${escHtml(thumb)}" loading="lazy"
-        onerror="this.parentElement.style.display='none'"
-        alt="${escHtml(title)}">
-      <div class="res-img-card-label">${escHtml(title)}</div>`;
-
-    card.addEventListener('click', () => openResult(item.url));
-    grid.appendChild(card);
-  });
-}
-
-// ── SKELETON ──────────────────────────────────────────────────────────
-function showSkeletons(n = 6) {
-  const list = document.getElementById('resList');
-  const grid = document.getElementById('resImgGrid');
-  if (list) { list.style.display = 'block'; list.innerHTML = ''; }
-  if (grid) grid.style.display = 'none';
-
-  for (let i = 0; i < n; i++) {
-    const s = document.createElement('div');
-    s.className = 'res-skeleton';
-    s.innerHTML = `
-      <div class="skel-line skel-top"></div>
-      <div class="skel-line skel-title"></div>
-      <div class="skel-line skel-title2"></div>
-      <div class="skel-line skel-desc"></div>
-      <div class="skel-line skel-desc2"></div>`;
-    list.appendChild(s);
-  }
-}
-
-// ── ERROR / EMPTY STATES ───────────────────────────────────────────────
-function showError(msg) {
-  const list = document.getElementById('resList');
-  if (!list) return;
-  list.innerHTML = `
-    <div class="res-error">
-      <div class="res-error-icon">⚠️</div>
-      <div class="res-error-title">Search failed</div>
-      <div class="res-error-sub">${escHtml(msg)}</div>
-      <button class="res-retry-btn" onclick="fetchResults()">Try Again</button>
-    </div>`;
-}
-
-function showEmpty(msg) {
-  const list = document.getElementById('resList');
-  if (!list) return;
-  list.innerHTML = `
-    <div class="res-empty">
-      <div class="res-empty-icon">🔭</div>
-      <div class="res-empty-title">${escHtml(msg)}</div>
-      <div class="res-empty-sub">Try different keywords</div>
-    </div>`;
-}
-
-// ── OPEN RESULT ────────────────────────────────────────────────────────
-function openResult(url) {
-  if (!url) return;
-  try { Android.openUrl(url); }
-  catch(e) { window.location.href = url; }
-}
-
-// ── UTILS ─────────────────────────────────────────────────────────────
+// ── UTILS ─────────────────────────────────────────────────────────────────
 function getDomain(url) {
-  try { return new URL(url).hostname.replace('www.',''); }
-  catch(e) { return url.slice(0,30); }
+  try { return new URL(url).hostname.replace('www.', ''); }
+  catch(e) { return (url || '').slice(0, 30); }
 }
 
-function escHtml(str) {
-  return String(str)
-    .replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>')
-    .replace(/&quot;/g,'"').replace(/&#39;/g,"'")
-    .replace(/</g,'&lt;').replace(/>/g,'&gt;');
+function esc(str) {
+  return String(str || '')
+    .replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;/g,"'")
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-function formatNum(n) {
+function deEnt(str) {
+  return String(str || '')
+    .replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&nbsp;/g,' ');
+}
+
+function fmtNum(n) {
   if (!n) return '?';
   if (n >= 1000000) return (n/1000000).toFixed(1) + 'M';
-  if (n >= 1000) return (n/1000).toFixed(0) + 'K';
+  if (n >= 1000)    return (n/1000).toFixed(0) + 'K';
   return String(n);
 }
 
-function formatDate(dateStr) {
+function fmtDate(str) {
   try {
-    const d = new Date(dateStr);
-    const diff = Math.floor((Date.now() - d.getTime()) / 1000);
-    if (diff < 3600) return `${Math.floor(diff/60)}m ago`;
-    if (diff < 86400) return `${Math.floor(diff/3600)}h ago`;
-    if (diff < 604800) return `${Math.floor(diff/86400)}d ago`;
-    return d.toLocaleDateString('en', { month:'short', day:'numeric' });
+    var d    = new Date(str);
+    var diff = Math.floor((Date.now() - d.getTime()) / 1000);
+    if (diff < 60)     return 'Just now';
+    if (diff < 3600)   return Math.floor(diff/60) + 'm ago';
+    if (diff < 86400)  return Math.floor(diff/3600) + 'h ago';
+    if (diff < 604800) return Math.floor(diff/86400) + 'd ago';
+    return d.toLocaleDateString('en', {month:'short', day:'numeric'});
   } catch(e) { return ''; }
 }
 
-// Toast helper
 function showToast(msg) {
-  const t = document.getElementById('restoast');
+  var t = document.getElementById('restoast');
   if (!t) return;
-  t.textContent = msg; t.classList.add('show');
+  t.textContent = msg;
+  t.classList.add('show');
   clearTimeout(t._t);
-  t._t = setTimeout(() => t.classList.remove('show'), 2200);
+  t._t = setTimeout(function() { t.classList.remove('show'); }, 2500);
 }

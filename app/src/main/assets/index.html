@@ -31,6 +31,7 @@
           <div class="greeting-sub" id="dateDisplay">Loading...</div>
           <div class="greeting-main" id="greetingMain">Good <span class="greet-accent">Morning</span>, Explorer</div>
           <div class="clock-time" id="clockDisplay">--:-- --</div>
+          <div class="weather-inline" id="weatherInline" style="display:none"></div>
         </div>
         <div class="eclipse-orb-wrap" id="crescentWrap">
           <div class="eclipse-orb">
@@ -64,9 +65,6 @@
       </div>
     </div>
 
-    <!-- WEATHER WIDGET (Dawn 0.3) -->
-    <div class="weather-widget fu" id="weatherWidget" style="display:none"></div>
-
     <!-- SEARCH -->
     <div class="search-wrap fu fu2">
       <div class="search-row">
@@ -75,8 +73,8 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
           </div>
           <input type="text" class="search-input" id="searchInput" placeholder="Search or enter address..."
-            onfocus="document.getElementById('searchBar').classList.add('focused')"
-            onblur="document.getElementById('searchBar').classList.remove('focused')"
+            onfocus="document.getElementById('searchBar').classList.add('focused');hideMusicBubble()"
+            onblur="document.getElementById('searchBar').classList.remove('focused');showMusicBubble()"
             onkeyup="if(event.key==='Enter')doSearch()">
         </div>
         <button class="search-btn" onclick="doSearch()" type="button">
@@ -282,13 +280,21 @@
       <div class="toggle-row"><span>Eclipse Orb</span><div class="tog on" id="togOrb" onclick="toggleOrb(this)"></div></div>
     </div>
     <div class="cp-section">
-      <div class="cp-label">Search Engine</div>
-      <div class="se-opts">
-        <div class="se-opt active" data-se="duckduckgo" onclick="setSearchEngine('duckduckgo',this)"><span>🦆 DuckDuckGo</span><div class="opt-check">✓</div></div>
-        <div class="se-opt" data-se="google" onclick="setSearchEngine('google',this)"><span>🔍 Google</span><div class="opt-check"></div></div>
-        <div class="se-opt" data-se="bing" onclick="setSearchEngine('bing',this)"><span>🅱️ Bing</span><div class="opt-check"></div></div>
-        <div class="se-opt" data-se="brave" onclick="setSearchEngine('brave',this)"><span>🦁 Brave</span><div class="opt-check"></div></div>
+      <div class="cp-label">Search</div>
+      <div class="cp-info-row">
+        <div class="cp-info-icon">🌑</div>
+        <div class="cp-info-text">
+          <div class="cp-info-title">Eclipse Search</div>
+          <div class="cp-info-sub">Private results via SearXNG · No tracking</div>
+        </div>
+        <div class="cp-info-badge">ON</div>
       </div>
+    </div>
+    <div class="cp-section">
+      <div class="cp-label">Widgets</div>
+      <div class="toggle-row"><span>Weather Widget</span><div class="tog on" id="togWeather" onclick="toggleWeather(this)"></div></div>
+      <div class="toggle-row"><span>Live News</span><div class="tog on" id="togNews" onclick="toggleNewsWidget(this)"></div></div>
+      <div class="toggle-row"><span>Quick Access Sites</span><div class="tog on" id="togSites" onclick="toggleSitesWidget(this)"></div></div>
     </div>
   </div>
 </div>
