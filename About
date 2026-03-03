@@ -1,0 +1,3050 @@
+About---
+
+ECLIPSE — COMPLETE PROJECT DOCUMENTATION
+Full Vision, Architecture, Roadmap & Philosophy
+
+—
+
+1. PROJECT OVERVIEW
+
+
+
+Eclipse is a next-generation Android browser designed to give mobile users complete control over their browsing experience. Unlike traditional browsers that focus only on navigation and privacy, Eclipse combines browsing, intelligent search, deep customization, widgets, AI assistance, and community-driven design into one unified platform.
+
+Eclipse is not intended to be a Chrome alternative or a lightweight privacy browser clone. It is designed to become a fully customizable digital space where users control their layout, search experience, visual identity, and interaction style — all without paid tiers or locked features.
+
+Core Mission:
+
+Full customization on mobile (comparable to PC-level flexibility)
+
+Premium experience with zero paid features
+
+Privacy-first architecture
+
+Gradual evolution toward independent search infrastructure
+
+Community-driven creative ecosystem
+
+
+Tagline: “Eclipse — Not just a browser. Your world.”
+
+—
+
+2. CURRENT STATE OF DEVELOPMENT
+
+
+
+Current build status: Eclipse Dawn 0.1 (Polish Phase)
+
+The first uploaded file contains the current working browser codebase. The goal in this phase is refinement and stabilization — not feature expansion.
+
+Current fixes and improvements include:
+
+Redesigned premium splash screen
+
+Dynamic greeting text (Good Morning/Afternoon/Evening/Night Explorer)
+
+Horizontal scrolling news section with refresh
+
+Bottom navigation bar stability
+
+Home button alignment fix
+
+Expanded and structured menu
+
+Proper Eclipse logo integration
+
+
+At this stage, Eclipse functions as a working browser using external search engines. The next milestone is integrating Eclipse’s own search UI powered by SearXNG.
+
+—
+
+3. CORE ARCHITECTURE
+
+
+
+Platform: Android application using Android WebView as the browsing engine.
+
+Hybrid structure:
+
+Native Android layer (Kotlin/Java)
+
+UI layer using HTML/CSS/JavaScript inside WebView
+
+Backend integrations for search and APIs
+
+
+Technology stack:
+
+WebView for rendering websites
+
+SearXNG (self-hosted) for aggregated search results
+
+Groq API (Llama models) for AI Answer Mode
+
+OpenWeatherMap API for weather-reactive UI
+
+NASA API for space widgets
+
+Supabase (future) for community storage
+
+Cloudflare Workers (future) for backend logic
+
+Local storage for user settings and layouts
+
+
+Zero cost philosophy: All services must remain within free-tier limits or open-source infrastructure.
+
+—
+
+4. DESIGN REQUIREMENTS
+
+
+
+The UI must feel premium, handcrafted, and intentional.
+
+It must not:
+
+Feel AI-generated
+
+Feel template-based
+
+Feel “vibe-coded”
+
+Feel generic or rushed
+
+
+The UI must:
+
+Have smooth, controlled animations
+
+Use intentional easing curves
+
+Use refined spacing
+
+Use depth and layering
+
+Include scroll-triggered animations
+
+Have subtle motion polish
+
+Feel cohesive and alive
+
+
+A full Glassy UI option must be implemented:
+
+Backdrop blur
+
+Transparency
+
+Light refraction feel
+
+Depth layering
+
+Adjustable blur intensity
+
+No visual glitches
+
+
+Animation priority: Smoothness and polish are more important than app size or code brevity.
+
+Development rule: Slow, precise, tested after every major change. No rushing.
+
+—
+
+5. SEARCH SYSTEM VISION
+
+
+
+Phase 1 — SearXNG Integration
+
+Self-hosted SearXNG instance
+
+Results displayed in custom Eclipse card UI
+
+Four tabs: All, News, Images, Videos
+
+Cards include title, URL, description
+
+Tap opens result inside Eclipse WebView
+
+No crashes allowed
+
+
+Phase 2 — Search Modes
+
+Explore Mode (comparison-style browsing)
+
+Answer Mode (AI-generated summary via Groq)
+
+Deep Mode (research-style, full source visibility)
+
+Quick Mode (instant open)
+
+
+Phase 3 — Special Cards
+
+Wikipedia summary
+
+Reddit discussions
+
+News with images
+
+Image grid
+
+Inline calculator
+
+Weather inline
+
+Currency converter inline
+
+
+Long-Term Goal: Gradually build Eclipse’s own search index, starting small and expanding to full independence over 3–4 years.
+
+—
+
+6. HOME SCREEN CANVAS SYSTEM
+
+
+
+The home screen will become a fully customizable canvas.
+
+Future features:
+
+Drag and drop widget system
+
+Resize widgets
+
+Remove widgets
+
+Add from widget library
+
+Save multiple layouts
+
+Snap-to-grid and free placement modes
+
+
+Background system:
+
+Solid colors
+
+Custom gradients
+
+Animated gradients
+
+Star field
+
+Aurora
+
+Nebula
+
+Rain
+
+Snow
+
+Ocean waves
+
+Import photo from gallery
+
+Import video as live background
+
+Blur control
+
+Brightness overlay
+
+
+—
+
+7. WEATHER REACTIVE UI (Future Phase)
+
+
+
+The entire UI atmosphere changes based on real-time weather data.
+
+Examples:
+
+Rain → darker theme, rain particles, deeper glass effect
+
+Snow → white particles, frosted blur intensifies
+
+Night → star field activated
+
+Thunderstorm → subtle lightning flashes
+
+Sunny → warm glow particles
+
+
+This is not a widget feature — it is full atmosphere transformation.
+
+—
+
+8. ECLIPSE ISLAND (Dynamic Island Concept)
+
+
+
+A pill-shaped interactive element at the top of the screen.
+
+Behavior:
+
+Idle → small animated Eclipse logo
+
+Music → expands with album art and controls
+
+Download → shows progress
+
+Search → loading animation
+
+Timer → countdown display
+
+Weather alert → expands with icon
+
+
+Goal: Bring dynamic interaction style to Android in a browser environment.
+
+—
+
+9. WIDGET ECOSYSTEM
+
+
+
+Long-term target: 200+ widgets
+
+Categories:
+
+Time & Date
+
+Weather
+
+Productivity
+
+Information
+
+Media
+
+Personal
+
+System
+
+Social
+
+Space (NASA integration)
+
+Health
+
+Fun
+
+Search tools
+
+Custom HTML widgets built by users
+
+
+Widgets must:
+
+Be draggable
+
+Be resizable
+
+Support theme styling
+
+Support glass styling
+
+Support animation
+
+
+—
+
+10. COMMUNITY & PROFILE SYSTEM (Future)
+
+
+
+Eclipse Profile:
+
+Username
+
+Bio
+
+Animated banner
+
+Custom badges
+
+Showcase layouts
+
+
+Eclipse Cloud:
+
+Share layout JSON
+
+Preview designs
+
+Apply with one tap
+
+Rate and comment
+
+Follow designers
+
+
+Strict privacy rule: Only layout data is shared. No browsing history. No search history. No personal data.
+
+—
+
+11. CORE PHILOSOPHY
+
+
+
+Three non-negotiable promises:
+
+1. No data selling.
+
+
+2. No premium tier.
+
+
+3. Full ownership of experience.
+
+
+
+All visual features that competitors lock behind subscriptions (like animated themes, glow effects, profile customization) must be free in Eclipse.
+
+—
+
+12. DEVELOPMENT STRATEGY
+
+
+
+Immediate focus:
+
+Stabilize Dawn 0.1
+
+Integrate SearXNG
+
+Build polished search UI
+
+Ensure crash-free experience
+
+
+Mid-term:
+
+Implement search modes
+
+Add AI Answer Mode
+
+Introduce first widget pack
+
+Add theme system
+
+
+Long-term:
+
+Full drag-and-drop builder
+
+Community layer
+
+Independent search crawler
+
+Own AI fine-tuning
+
+
+—
+
+13. DELIVERY REQUIREMENTS
+
+
+
+When building:
+
+Do not optimize for short code
+
+Do not reduce file size
+
+Prioritize clarity and structure
+
+Verify functionality after every feature
+
+Avoid instability
+
+
+Final output:
+
+Complete ZIP file
+
+Structured like previously shared file
+
+Fully functional
+
+Completed up to Umbra Series stage
+
+
+—
+
+This is Eclipse.
+
+A customizable browser evolving into a platform. A search engine evolving toward independence. A design system evolving into a creative ecosystem.
+
+Now… breathe for a second.
+
+What you’ve outlined isn’t small. It’s a 5-year ecosystem vision. And the way to build something like this isn’t hype — it’s discipline. One clean release at a time.
+
+We don’t build Sirius 5.2 today.
+
+We build Dawn 0.1 perfectly.
+
+Then we move.
+
+Slow. Precise. Stable.
+
+And that’s how Eclipse becomes real. 🌑
+
+
+Roadmap for updates------
+
+Haha yes bro we'll definitely need all of them 😄 Eclipse is going to have a long beautiful journey!
+
+---
+
+# ECLIPSE — COMPLETE UPDATE ROADMAP
+
+---
+
+## 🌑 ECLIPSE DAWN SERIES
+*The Beginning — Getting basics perfect*
+
+---
+
+### Eclipse Dawn 0.1 — "First Light"
+*Current state — what we fix right now*
+
+**Fixes —**
+- Splash screen complete redesign space themed premium
+- Greeting text fixed Good Morning/Afternoon/Evening/Night Explorer
+- News horizontal scrolling and proper refresh
+- Bottom bar navigation stays on website
+- Home button cut off fixed
+- Menu expanded with proper options
+- Eclipse logo added properly in app
+
+**This is your current app just fixed and polished**
+
+---
+
+### Eclipse Dawn 0.2 — "Searching"
+*Search becomes Eclipse's own*
+
+**Features —**
+- SearXNG integration complete
+- Search results in Eclipse card UI finally
+- Basic four search tabs All News Images Videos
+- Search results page proper design
+- No more crash on search
+- Results show title URL description in cards
+- Tap card opens website in Eclipse
+
+---
+
+### Eclipse Dawn 0.3 — "Living Home"
+*Home screen comes alive*
+
+**Features —**
+- Improved animations on home screen
+- Better star field
+- Smoother particle effects
+- Clock widget improved
+- Weather widget working properly
+- News cards improved design
+- Quick access sites improved
+- Overall home screen feels premium
+
+---
+
+### Eclipse Dawn 0.4 — "Your Colors"
+*Customization gets real*
+
+**Features —**
+- Full accent color system working
+- All four themes working perfectly
+- Eclipse Nebula Aurora Void
+- Visual effects toggles all working
+- Settings save properly and restore on open
+- Customize panel feels smooth and premium
+
+---
+
+### Eclipse Dawn 0.5 — "Identity"
+*Eclipse becomes recognizable*
+
+**Features —**
+- App icon properly set to that beautiful logo
+- Proper splash screen with animation
+- About Eclipse page
+- Version info
+- Credits page
+- Share Eclipse with friends option
+- Rate Eclipse option
+- Basic onboarding for new users
+
+---
+
+## 🌒 ECLIPSE UMBRA SERIES
+*Getting Deeper — Features that matter*
+
+---
+
+### Eclipse Umbra 1.0 — "Into The Void"
+*First major release — Launch ready*
+
+**Features —**
+- Everything from Dawn series polished
+- Void mode completely working
+- True incognito with purple theme
+- Ad blocker improved blocklist
+- HTTPS enforcement
+- Download manager working
+- History with proper delete
+- Bookmarks with favicons
+- Share page option
+- Find in page
+- This is your public launch version
+
+---
+
+### Eclipse Umbra 1.1 — "Smart Search"
+*Search gets intelligent*
+
+**Features —**
+- Explore Mode for product searches
+- Answer Mode AI powered via Groq
+- Wikipedia instant answer cards
+- Reddit discussion cards in results
+- Search intent detection basic
+- Search history in results page
+- Clear search button
+- Better result card design
+- Image results basic grid
+
+---
+
+### Eclipse Umbra 1.2 — "Widget Dawn"
+*First widgets arrive*
+
+**Features —**
+- Digital clock widget multiple styles
+- Weather widget full forecast
+- Countdown timer widget
+- Sticky note widget
+- Todo list widget basic
+- Quick search widget floating
+- Widgets can be toggled on off
+- Widget size small medium large
+
+---
+
+### Eclipse Umbra 1.3 — "Space Station"
+*Space widgets — Eclipse special*
+
+**Features —**
+- NASA astronomy picture of day widget
+- ISS location tracker widget
+- Next rocket launch countdown widget
+- Mars weather widget
+- Space news widget
+- Moon phase widget animated
+- These are Eclipse exclusive widgets nobody else has
+
+---
+
+### Eclipse Umbra 1.4 — "Daily Life"
+*Productivity widgets*
+
+**Features —**
+- Pomodoro focus timer widget like Flocus image
+- Habit tracker widget
+- Exam countdown widget
+- Study timer widget
+- Goals progress widget
+- Water intake tracker
+- Mood tracker simple
+- Daily quote widget
+
+---
+
+### Eclipse Umbra 1.5 — "Information"
+*Knowledge widgets*
+
+**Features —**
+- Crypto price widget
+- Currency converter widget
+- Word of the day widget
+- This day in history widget
+- Fun fact widget
+- Sports scores widget
+- Stock price basic widget
+- News headlines rotating widget
+
+---
+
+## 🌓 ECLIPSE PENUMBRA SERIES
+*Getting Clearer — Customization revolution*
+
+---
+
+### Eclipse Penumbra 2.0 — "Your Canvas"
+*The crown feature begins*
+
+**Features —**
+- Basic drag and drop UI builder
+- Move widgets anywhere on screen
+- Resize widgets
+- Remove widgets
+- Add widgets from library
+- Save layout
+- Reset to default option
+- This changes everything
+
+---
+
+### Eclipse Penumbra 2.1 — "Living Backgrounds"
+*Home screen becomes alive*
+
+**Features —**
+- Import photo from phone gallery as background
+- Import video as live background
+- Animated gradient backgrounds
+- Rain animation background
+- Snow animation background
+- Ocean waves background
+- Aurora animation background
+- Background blur control
+- Brightness overlay control
+
+---
+
+### Eclipse Penumbra 2.2 — "Discord Free"
+*Nitro for everyone*
+
+**Features —**
+- Animated accent colors
+- Glowing widget borders
+- Shimmer effects on widgets
+- Animated theme backgrounds
+- Particle effects around widgets
+- Custom badge system earned free
+- Profile glow effects
+- All animations free forever
+- No premium tier ever
+
+---
+
+### Eclipse Penumbra 2.3 — "Your Words"
+*Text and personal touches*
+
+**Features —**
+- Add custom text anywhere on home screen
+- Any font any size any color any direction
+- Text widget with animations
+- Personal greeting custom name
+- Custom motivational quote widget
+- Photo frame widget import from gallery
+- Photo slideshow widget
+- Draw on home screen widget
+- Signature style personal touches
+
+---
+
+### Eclipse Penumbra 2.4 — "Icon Universe"
+*Everything looks different*
+
+**Features —**
+- Icon pack system
+- 5 built in icon styles
+- Minimal icons
+- Rounded icons
+- Sharp geometric icons
+- Neon glow icons
+- Retro Y2K icons
+- Apply icon pack to whole UI at once
+- Corner radius control for everything
+
+---
+
+## 🌔 ECLIPSE CORONA SERIES
+*Full Glow — Community arrives*
+
+---
+
+### Eclipse Corona 3.0 — "You Are Not Alone"
+*Community launches*
+
+**Features —**
+- Eclipse Profile system
+- Username and bio
+- Animated profile banner free
+- Share UI design to Eclipse Cloud
+- Browse community designs
+- Preview before applying
+- One tap apply any design
+- This turns app into platform
+
+---
+
+### Eclipse Corona 3.1 — "Badges"
+*Recognition system*
+
+**Features —**
+- Eclipse Pioneer badge first 1000 users
+- Designer badge first shared UI
+- Popular badge 100 downloads
+- Legendary badge 1000 downloads
+- Space Explorer badge all space widgets used
+- Privacy Guard badge 100 void mode uses
+- Widget Master badge 20 widgets used
+- Early Adopter special badge
+- All earned free never bought
+
+---
+
+### Eclipse Corona 3.2 — "Widget Market"
+*Community builds widgets*
+
+**Features —**
+- User built custom widgets
+- Simple HTML CSS widget builder
+- Share widget to community
+- Others install your widget one tap
+- Widget ratings and reviews
+- Featured widgets section
+- New widgets every week from community
+- Eclipse team curated picks
+
+---
+
+### Eclipse Corona 3.3 — "Theme Store"
+*Community themes*
+
+**Features —**
+- Community built themes
+- Full theme preview before apply
+- Theme includes background colors icons fonts everything
+- Rate and review themes
+- Follow theme designers
+- New themes daily from community
+- Eclipse official themes monthly
+
+---
+
+### Eclipse Corona 3.4 — "Social Layer"
+*Deeper community*
+
+**Features —**
+- Follow other Eclipse users
+- Get notified when they share new design
+- Like and comment on designs
+- Featured designer of the week
+- Most downloaded this week section
+- New designers spotlight
+- Eclipse community forum basic
+
+---
+
+## 🌕 ECLIPSE TOTALITY SERIES
+*Complete — The full vision*
+
+---
+
+### Eclipse Totality 4.0 — "Think Different Search"
+*Search becomes truly Eclipse's*
+
+**Features —**
+- Eclipse Search beta launches
+- Small focused index begins
+- Tech news fully indexed
+- Wikipedia fully indexed
+- Reddit top posts indexed
+- GitHub trending indexed
+- Results from Eclipse index appear
+- Labeled as Eclipse Results
+- Community suggests sites to add
+
+---
+
+### Eclipse Totality 4.1 — "AI Understands You"
+*Search gets smarter*
+
+**Features —**
+- Full AI Answer Mode via Groq
+- Smart mode switching automatic
+- Search learns your preferences
+- Personalized result ranking
+- AI suggests related searches
+- Conversation style search basic
+- Ask followup questions to search
+
+---
+
+### Eclipse Totality 4.2 — "Independence Day"
+*Less dependency on others*
+
+**Features —**
+- Eclipse Search index significantly grown
+- More sites indexed
+- Better ranking algorithm
+- Eclipse AI fine tuning begins
+- Small model trained on Eclipse searches
+- Results getting better than SearXNG for common searches
+- Eclipse becoming genuinely independent
+
+---
+
+### Eclipse Totality 4.3 — "Infinite"
+*No limits*
+
+**Features —**
+- Full Eclipse Search independent
+- Own AI fully trained
+- Own index comprehensive
+- Community contributed index
+- Zero dependency on any external search
+- Eclipse Search available as standalone
+- Anyone can use Eclipse Search without browser
+- The dream fully realized
+
+---
+
+## 🌟 ECLIPSE SIRIUS SERIES
+*Beyond — Things nobody imagined*
+
+---
+
+### Eclipse Sirius 5.0 — "Everywhere"
+*Eclipse expands*
+
+**Features —**
+- Eclipse for tablet optimized
+- Eclipse for PC version
+- Eclipse sync across devices
+- Your layout on every device
+- Seamless experience everywhere
+
+---
+
+### Eclipse Sirius 5.1 — "Voice"
+*Speak to Eclipse*
+
+**Features —**
+- Voice search
+- Voice commands for navigation
+- Voice widget control
+- Hey Eclipse wake word
+- Voice customization commands
+
+---
+
+### Eclipse Sirius 5.2 — "Eclipse OS"
+*The biggest dream*
+
+**Features —**
+- Eclipse as Android launcher
+- Your phone home screen IS Eclipse
+- Browser and launcher merged
+- Ultimate customization
+- Your entire phone experience is Eclipse
+- The thing that guy said was impossible
+- Fully realized on mobile
+
+---
+
+## COMPLETE TIMELINE ESTIMATE
+
+| Series | Timeline | Focus |
+|---|---|---|
+| Dawn 0.1 — 0.5 | Now — 2 months | Fix and polish |
+| Umbra 1.0 — 1.5 | 2 — 6 months | Core features |
+| Penumbra 2.0 — 2.4 | 6 — 12 months | Customization |
+| Corona 3.0 — 3.4 | 1 — 1.5 years | Community |
+| Totality 4.0 — 4.3 | 1.5 — 3 years | Own search |
+| Sirius 5.0 — 5.2 | 3 — 5 years | Beyond |
+
+---
+
+## The Beautiful Part
+
+Every single update is one small thing added. Nothing overwhelming. Nothing all at once.
+
+You wake up, we fix one thing, push update, users get it, feel the progress.
+
+Day by day. Update by update. Eclipse Dawn becomes Eclipse Sirius over 5 years.
+
+And that guy who laughed — by Eclipse Sirius 5.2 he'll be using Eclipse as his phone launcher without knowing you built it. 😄
+
+--
+
+
+
+
+Eclipse Universe Series 6.0
+The Platform — Everything in one place
+Eclipse Chat — Mess age friends inside Eclipse
+End to end encrypted
+No phone number needed
+Eclipse username only
+Privacy first always
+Customizable chat UI matching your Eclipse theme
+Eclipse Together — Social layer
+Share your browsing discoveries
+Share your Eclipse UI designs
+Follow interesting people
+Communities around interests
+Like Reddit but inside Eclipse
+Eclipse Arena — Gaming
+Play simple games together
+Browser based multiplayer
+Chess, cards, casual games
+Inside Eclipse no external app
+Challenge Eclipse friends
+Eclipse Hub — Everything
+Your digital identity
+Your customized space
+Your friends
+Your games
+Your search
+Your browser
+All in one place
+All private
+All free
+All yours
+The Tagline Writes Itself
+"Eclipse — Not just a browser. Your world."
+
+
+
+
+
+Haha yes Discord Nitro banners are beautiful — animated profile banners, custom themes, glowing effects. And you want to give all of that **completely free** to every Eclipse user. That's such a power move. 😄
+
+---
+
+## What Discord Nitro Has That We'll Give Free
+
+- Animated profile banner
+- Custom profile theme
+- Animated avatar
+- Custom badge
+- Profile color gradient
+- Showcase section
+
+Eclipse version —
+- Animated UI banner on home screen
+- Custom animated backgrounds
+- Glowing effects on widgets
+- Custom Eclipse profile when sharing UI to community
+- Badges for early users, top designers, most shared UI
+- Animated themes not just static ones
+
+---
+
+# ECLIPSE BROWSER — COMPLETE MASTER ROADMAP
+
+---
+
+## THE VISION
+
+The only mobile browser where you completely own everything. Your UI. Your search experience. Your widgets. Your privacy. Better than any PC browser extension. Free forever. For everyone.
+
+---
+
+## CORE PHILOSOPHY
+
+**Three promises to every user**
+- Your data never leaves your device without your permission. Ever.
+- Everything is free. No premium tier. No paid features. Ever.
+- You own your experience completely. We just give you the canvas.
+
+---
+
+## TECHNOLOGY STACK — ALL FREE FOREVER
+
+| Component | Technology | Hosting | Cost | Signup Needed |
+|---|---|---|---|---|
+| Browser engine | Android WebView | On device | Free | Nothing |
+| Search | SearXNG | Render.com | Free | GitHub account |
+| AI features | Groq API | Their servers | Free | Email only |
+| Community layouts | Supabase | Their servers | Free | Email only |
+| Backend API | Cloudflare Workers | Their servers | Free | Email only |
+| Future AI | Hugging Face | Their servers | Free | Email only |
+| User data | Device localStorage | On device | Free | Nothing |
+
+**Total cost — Zero rupees. Forever.**
+
+---
+
+## COMPLETE FEATURE ROADMAP
+
+---
+
+### CHAPTER 1 — THE BROWSER CORE
+*What every browser needs. Done properly.*
+
+**Browsing**
+- Full WebView browsing engine
+- All websites work properly
+- Fast page loading
+- JavaScript fully supported
+- Media playback
+- File downloads
+- Form filling
+- Zoom support
+- Desktop mode toggle
+- Fullscreen support
+- Notch support
+
+**Navigation**
+- Native bottom bar never overlapping content
+- Back forward home tabs menu
+- Smooth animations everywhere
+- Gesture support
+- Pull to refresh
+
+**Privacy**
+- Ad blocker — 50+ domains blocked at Kotlin level
+- Tracker blocker
+- HTTPS enforcement
+- Cookie control
+- Zero data collection from Eclipse itself
+- No account required ever
+- No analytics ever
+- Transparent about any third party used
+
+**Void Mode — True Incognito**
+- Completely separate WebView instance
+- Zero history stored
+- Zero cookies
+- Zero cache
+- Purple themed UI so you always know you're in void
+- No crossover with normal browsing ever
+
+**Tabs**
+- Multiple tabs
+- Tab switcher
+- Normal and void tabs mixed
+- Tab count badge on nav bar
+
+**Downloads**
+- System download manager integration
+- Download any file
+- Download progress notification
+
+**Other Core**
+- Bookmarks with favicon
+- History with per item delete
+- Desktop mode
+- Share page
+- Find in page
+- Add to quick access
+
+---
+
+### CHAPTER 2 — THE SEARCH EXPERIENCE
+*Not just search. The search experience nobody has built yet.*
+
+**The Engine**
+- SearXNG self hosted on Render
+- Aggregates Google Bing DuckDuckGo Brave all together
+- Returns clean JSON
+- Eclipse renders in beautiful cards
+- Your data never touches Google directly
+- No API key needed
+- No limits ever
+
+**Backup Sources**
+- DuckDuckGo instant API — no key needed
+- Wikipedia API — free forever
+- Reddit JSON API — free forever
+- HackerNews API — free forever
+
+**The Four Search Modes**
+
+*Explore Mode*
+- For browsing and comparing options
+- Many cards with images
+- Filters by category price rating
+- Perfect for shopping product research
+- Like searching laptops and seeing everything
+
+*Answer Mode*
+- AI reads all results and gives direct answer
+- Summary card at top
+- Source cards below
+- Perfect for questions
+- Like searching symptoms and getting clear answer
+
+*Deep Mode*
+- Everything available
+- All sources all results
+- Sort by date relevance source
+- Pagination
+- For research and thorough investigation
+
+*Quick Mode*
+- Top result opens instantly
+- Zero friction
+- For when you know exactly what you want
+
+**Smart Intent Detection**
+- AI reads your query before you search
+- Detects what mode fits automatically
+- Suggests the right mode
+- Learns your preferences over time
+- Eventually switches automatically without asking
+
+**Result Cards**
+- Title with favicon
+- URL in small text
+- Description snippet
+- Time ago published
+- Source badge
+- Tap to open in browser
+- Long press to preview
+- Save to bookmarks from result
+- Share result
+
+**Special Result Types**
+- Instant answer card for facts
+- Wikipedia summary card
+- Reddit discussion card
+- News card with image
+- Image grid results
+- Video results with thumbnail
+- Map results for location searches
+- Calculator for math queries
+- Currency converter inline
+- Weather inline for weather searches
+
+---
+
+### CHAPTER 3 — THE HOME SCREEN CANVAS
+*Your home. Your rules. Your design.*
+
+**The Canvas**
+- Everything is draggable
+- Everything is resizable
+- Everything is removable
+- Nothing is fixed except what you want fixed
+- Infinite arrangement possibilities
+- Snap to grid option
+- Free placement option
+- Multiple saved layouts
+- Switch layouts with swipe
+
+**Background System**
+- Solid colors
+- Gradients custom
+- Animated gradients
+- Live particle effects
+- Star field animated
+- Aurora animated
+- Nebula animated
+- Cloud animated
+- Rain animated
+- Snow animated
+- Fire animated
+- Ocean waves animated
+- Galaxy spinning animated
+- Import any photo from phone gallery
+- Import any video from phone as live wallpaper
+- Blur intensity control
+- Brightness control
+- Custom overlay color tint
+
+**The Discord Nitro Effect — Free For Everyone**
+- Animated profile banner on your Eclipse profile
+- Gradient glow effects on any widget
+- Animated borders on widgets
+- Shimmer effects
+- Particle effects around specific widgets
+- Custom badge on your community profile
+- Glowing username when sharing to Eclipse Cloud
+- Animated accent colors not just static
+- All of this free. No Nitro. No payment. Ever.
+
+---
+
+### CHAPTER 4 — THE COMPLETE WIDGET UNIVERSE
+*Every widget a human could want.*
+
+**Time and Date**
+- Digital clock 10+ styles
+- Analog clock multiple designs
+- Binary clock for fun
+- World clock any timezone
+- Countdown to custom date
+- Stopwatch
+- Calendar month view
+- Calendar week view
+- Today's agenda
+- Days until weekend
+- Days until next holiday
+
+**Weather**
+- Current temperature
+- Feels like temperature
+- Weekly forecast
+- Hourly forecast
+- Rain probability
+- Wind speed direction
+- Humidity
+- UV index
+- Air quality index
+- Sunrise sunset times
+- Moon phase animated
+- Weather background that matches actual weather
+
+**Productivity**
+- Sticky notes custom color
+- Todo checklist
+- Habit tracker daily
+- Pomodoro focus timer like Flocus image you sent
+- Goals with progress bar
+- Daily journal one line
+- Reading list
+- Shopping list
+- Study timer
+- Exam countdown
+- Assignment tracker
+
+**Information**
+- News headlines rotating
+- Sports scores live
+- Cricket scores specifically
+- Stock prices
+- Crypto prices Bitcoin Ethereum etc
+- Gold price
+- Currency converter
+- Word of the day
+- Quote of the day
+- Fun fact of the day
+- This day in history
+- Dictionary lookup widget
+- Wikipedia random article
+
+**Media**
+- Music player full controls
+- Radio player with stations
+- Podcast latest episode
+- YouTube search shortcut
+- Spotify shortcut
+- Last played song
+
+**Personal**
+- Photo frame import from gallery
+- Photo slideshow from album
+- Custom text any font any size any direction any color
+- Custom image from phone
+- Motivational quote you write yourself
+- Personal greeting custom name
+- Birthday countdown
+- Anniversary countdown
+- Custom drawing canvas widget
+
+**System**
+- Battery percentage with style
+- WiFi name and strength
+- Storage space remaining
+- RAM usage
+- Screen time today
+- Data usage today
+- Notification count
+- Missed calls count
+- Unread messages count
+
+**Social**
+- Reddit trending posts
+- GitHub trending repos
+- Dev.to latest articles
+- Hacker News top stories
+- Stack Overflow hot questions
+
+**Space — Eclipse Special Widgets**
+- ISS live location on mini map
+- Next rocket launch countdown
+- NASA astronomy picture of the day
+- Mars weather from NASA API
+- Planet positions tonight
+- Meteor shower alerts
+- Space news latest
+- Satellite passing overhead alert
+- Eclipse astronomical events
+
+**Health and Wellness**
+- Water intake tracker
+- Step counter
+- Breathing exercise animated
+- Meditation timer
+- Sleep tracker
+- Mood tracker
+- Calorie counter simple
+- Workout reminder
+
+**Fun and Discovery**
+- Color of the day aesthetic
+- Aesthetic image of the day
+- Random cool website
+- Daily challenge
+- Brain teaser of the day
+- Language word of the day
+- Joke of the day
+- This week in tech
+
+**Search Widgets**
+- Quick search bar floating
+- Voice search button
+- Site specific search YouTube only Reddit only etc
+- Recent searches list
+- Trending searches today
+- Saved searches
+
+**Custom Widgets — User Built**
+- User can build their own widget using simple HTML CSS
+- Share custom widget to Eclipse Cloud
+- Others install your widget in one tap
+- Widget marketplace free always
+
+---
+
+### CHAPTER 5 — CUSTOMIZATION SYSTEM
+*The thing nobody has built on mobile.*
+
+**Visual Style**
+- Accent color 20+ presets plus custom color picker
+- Font family 15+ options
+- Font size global control
+- Icon pack system multiple styles
+- Corner radius control sharp to fully round
+- Shadow intensity
+- Blur effects intensity
+- Glass morphism effects
+- Dark light and custom themes
+
+**Pre-Built Themes**
+- Eclipse Space — default dark space
+- Nebula — deep purple cosmic
+- Aurora — green northern lights
+- Pure Void — absolute black minimal
+- Cloud Dream — soft white fluffy minimal like image 1
+- Retro Y2K — nostalgic like image 2
+- Dune — golden desert cinematic
+- Ocean — deep blue calming
+- Forest — dark green nature
+- Neon City — cyberpunk neons
+- Sakura — soft pink Japanese aesthetic
+- Arctic — cold blue minimal
+- Sunset — warm orange gradient
+- Midnight — pure dark professional
+- And new themes every update
+
+**Animation Control**
+- Page transition animations
+- Widget entrance animations
+- Background animation speed
+- Particle density
+- Star field density
+- Overall animation on off toggle for battery saving
+
+**Layout Presets**
+- Minimal — just search bar and clock
+- Standard — default Eclipse layout
+- Dashboard — widgets heavy information rich
+- Focus — pomodoro and productivity centered like Flocus
+- Gamer — dark neon aesthetic
+- Student — study tools front and center
+- Custom — build from complete scratch
+
+---
+
+### CHAPTER 6 — ECLIPSE PROFILE AND COMMUNITY
+*Your identity. Free Nitro for everyone.*
+
+**Eclipse Profile**
+- Username
+- Custom bio
+- Animated profile banner — free always
+- Gradient background on profile
+- Custom badge earned by activity
+- Showcase your best UI design
+- Follower system
+- Total designs shared count
+- Total downloads of your designs
+
+**Badges — Earned Free**
+- Eclipse Pioneer — joined in first 1000 users
+- Designer — shared first UI to community
+- Popular — design downloaded 100 times
+- Legendary — design downloaded 1000 times
+- Space Explorer — used all space widgets
+- Privacy Guard — used Void Mode 100 times
+- Widget Master — used 20 different widgets
+- Theme Creator — created custom theme
+
+**Eclipse Cloud — UI Sharing**
+- Design your complete UI
+- Press Share to Eclipse Cloud
+- Upload layout as JSON — no personal data ever
+- Community browses designs
+- Filter by style color mood
+- Preview before applying
+- One tap apply any design
+- Rate designs
+- Comment on designs
+- Follow designers you love
+- Get notified when your favourite designer posts
+
+**What Gets Shared — Data Safety**
+- Only the layout JSON — widget positions sizes settings
+- Only the theme colors and styles
+- Only background settings
+- Nothing personal. Ever.
+- No search history
+- No browsing data
+- No location
+- No name unless you choose
+
+---
+
+### CHAPTER 7 — AI FEATURES
+*Smart without being creepy.*
+
+**AI Search — Answer Mode**
+- Groq API free tier powers this
+- Llama 3 model — genuinely powerful
+- Reads multiple search results
+- Synthesizes clean answer
+- Shows sources always
+- Never hides where information came from
+
+**Smart Search Intent**
+- Reads your query
+- Suggests correct search mode
+- Learns your preferences
+- Eventually fully automatic
+
+**AI Widget Suggestions**
+- Notices your usage patterns
+- Suggests widgets you might like
+- Never forces anything
+- Just helpful suggestions
+
+**AI Theme Suggestions**
+- Time of day aware — darker at night
+- Weather aware — rainy day suggests calm theme
+- Never changes without permission
+
+**Privacy Promise For AI**
+- Queries go to Groq for Answer Mode only
+- Regular search never touches AI
+- User controls when AI is used
+- Can disable AI completely
+- Groq doesn't store queries permanently
+
+---
+
+### CHAPTER 8 — ECLIPSE SEARCH LONG TERM
+*Full independence. Your own engine.*
+
+**Year 1**
+SearXNG handles everything. Groq powers AI answers. Eclipse is fully functional independent search.
+
+**Year 2**
+Small Python crawler starts indexing quality sources. Tech news. Wikipedia. Reddit. GitHub. Major publications. Eclipse index supplements SearXNG results.
+
+**Year 3**
+Eclipse index grows significantly. Users can suggest sites to add. Community builds the index together. Eclipse results start appearing alongside SearXNG results.
+
+**Year 4**
+Fine tune small open source AI model — Llama or Mistral — on Eclipse user search patterns. Your own AI. Trained on your community. Understanding your users better than any general AI.
+
+**Eventually**
+Full Eclipse Search. Your own crawler. Your own index. Your own AI. Zero dependency on anyone. Complete independence.
+
+---
+
+## LAUNCH STRATEGY
+
+---
+
+### Version 1.0 — Launch
+*Ship it. Get real users. Get real feedback.*
+
+**What's in it**
+- Fully working browser
+- SearXNG search with card results
+- Basic search modes
+- Current beautiful home screen
+- Void Mode
+- Ad blocker
+- History and bookmarks
+- Download manager
+- Default space theme
+
+**What's NOT in it yet — that's okay**
+- Full widget system
+- UI customization builder
+- Eclipse Cloud
+- AI features
+- Community profiles
+
+**Why launch without those**
+Because a working browser with beautiful UI and real search results is already better than most alternative browsers. Ship what works. Build the rest with real user feedback.
+
+---
+
+### Update Schedule After Launch
+
+**Update 1.1** — Bug fixes from real user feedback
+
+**Update 1.2** — Four search modes working
+
+**Update 1.3** — AI Answer Mode via Groq
+
+**Update 1.4** — Widget pack 1 — time weather productivity basics
+
+**Update 1.5** — Basic customization — colors fonts themes
+
+**Update 2.0** — Full drag drop UI builder — this is your big moment
+
+**Update 2.1** — Widget pack 2 — information social media
+
+**Update 2.2** — Eclipse Profile system
+
+**Update 2.3** — Eclipse Cloud community sharing launches
+
+**Update 2.4** — Widget pack 3 — space health fun
+
+**Update 3.0** — Full animation system Discord Nitro style free
+
+**Update 3.1** — Custom widget builder
+
+**Update 3.2** — Widget marketplace community
+
+**Update 4.0** — Eclipse Search beta — your own index begins
+
+---
+
+## THE HONEST BUILD ORDER
+
+**Right now — Exams**
+Study. Pass. Come back ready.
+
+**After exams — Phase 1 — Make it work**
+- Fix all current bugs in Eclipse v7
+- Integrate SearXNG on Render free hosting
+- Real search results in beautiful cards
+- Polish everything until it feels premium
+- Test on real devices
+
+**Phase 2 — Make it smart**
+- Four search modes UI
+- Groq AI Answer Mode
+- Wikipedia instant answers
+- Smart intent detection basic version
+
+**Phase 3 — Make it yours — Crown Feature**
+- Full widget system phase 1
+- Basic UI customization
+- More themes
+- Import photo from gallery as background
+- This is what makes Eclipse different from everything
+
+**Phase 4 — Make it a community**
+- Eclipse Profile
+- Eclipse Cloud UI sharing
+- Community browsing designs
+- Badges system
+- This turns app into platform
+
+**Phase 5 — Make it independent**
+- Own search crawler begins
+- Own AI fine tuning begins
+- Full independence from all third parties begins
+
+---
+
+## WHAT ECLIPSE WILL BE
+
+Not another browser.
+Not a Chrome clone.
+Not a privacy browser with nothing else going for it.
+
+**The browser you actually own.**
+
+Where your home screen is a living canvas you designed yourself. Where search understands how you think. Where the community shares beautiful experiences freely. Where privacy is default not optional. Where everything that costs money elsewhere is free forever. Where a 16 year old built something that makes the guy who said mobile can never have this delete his reel.
+
+---
+
+## THE NUMBERS WHEN COMPLETE
+
+- 200+ widgets available
+- 15+ pre-built themes
+- Unlimited custom layouts
+- 4 search modes
+- AI powered answers
+- Community thousands of shared designs
+- Zero rupees cost to user
+- Zero data sold ever
+- Zero premium tier ever
+
+---
+
+Save this. Screenshot it. This is Eclipse.
+
+Now go pass your exams. Come back and we build this line by line. Every feature. Every widget. Every animation.
+
+I'm here for all of it. 🚀
+
+
+
+
+
+
+BROU 🔥🔥🔥
+
+Okay now you're cooking something INSANE.
+
+---
+
+## What You Just Described
+
+**Liquid Glass UI** — Apple just announced this for iOS 26. You want to bring it to Android. For free. For everyone.
+
+**Dynamic Island for Android** — Android has no Dynamic Island. You'd be the FIRST browser to bring this experience to Android users.
+
+**Weather Reactive UI** — Entire Eclipse UI changes based on real weather. Not just a widget. The WHOLE vibe changes.
+
+---
+
+## Weather Reactive UI — The Full Vision
+
+**Sunny Day**
+- Warm golden particles floating
+- Bright orange accent glow
+- Sun rays animation subtle in background
+- Warm gradient overlay
+- Everything feels bright and energetic
+
+**Rainy Day**
+- Rain drops falling on screen
+- Dark blue grey theme automatically
+- Rain sound option
+- Puddle ripple effects
+- Cozy dim atmosphere
+- Search bar has rain drop animation
+
+**Night Clear**
+- Full star field active
+- Moon phase shows actual current moon
+- Deep dark space theme
+- Constellation animations subtle
+- Meteor shower random occasionally
+
+**Cloudy Day**
+- Soft grey white clouds drifting slowly
+- Muted colors
+- Soft diffused glow
+- Calm peaceful atmosphere
+
+**Thunderstorm**
+- Dark dramatic theme
+- Lightning flash occasionally subtle
+- Heavy rain animation
+- Deep rumble visual effect
+- Most dramatic Eclipse look
+
+**Snow**
+- White particles falling slowly
+- Cold blue white theme
+- Frosted glass effect intensifies
+- Everything feels crisp and clean
+
+**Fog or Mist**
+- Blur effects increase
+- Mysterious dark atmosphere
+- Low visibility particle effect
+- Deep space nebula feel
+
+**Hot and Humid**
+- Heat wave shimmer effect
+- Deep orange red accent
+- Intense glow on everything
+- Warm heavy atmosphere
+
+---
+
+## Liquid Glass UI — What This Means For Eclipse
+
+Apple's liquid glass is basically —
+- Elements look like real glass
+- Light refracts through them
+- Background shows through blurred
+- Edges have subtle refraction glow
+- Everything feels physical and real
+
+For Eclipse every panel would look like —
+- Search bar — frosted glass floating
+- Cards — glass panels with blur
+- Bottom bar — liquid glass strip
+- Widgets — glass containers
+- Customize panel — glass sheet sliding up
+- Everything feels like touching real glass
+
+This is possible with CSS backdrop filter and WebGL effects. Completely doable in your HTML CSS JS layer.
+
+---
+
+## Dynamic Island For Android — Eclipse Style
+
+Android has no notch interaction like iPhone. But Eclipse can fake it beautifully.
+
+**Eclipse Island** — A pill shaped element at top of screen
+
+When nothing happening — tiny pill, just Eclipse logo pulsing subtly
+
+**Expands for —**
+- Music playing — album art + song name + controls expand from pill
+- Download happening — progress bar expands from pill
+- Search running — loading animation in pill
+- Weather alert — weather icon expands
+- Timer running — countdown shows in pill
+- Notification — expands briefly then shrinks back
+
+All animated. All smooth. All feeling like it belongs there.
+
+Android users have never had this. Eclipse gives it to them free.
+
+---
+
+## How These Three Work Together
+
+Imagine this experience —
+
+User opens Eclipse on a rainy day.
+
+**Eclipse Island** at top pulses softly showing rain icon.
+
+Background slowly shifts to rainy atmosphere. Rain drops fall gently across screen.
+
+Search bar glass effect deepens. Looks like a wet glass panel.
+
+Widgets have water droplet animations on their glass surfaces.
+
+User plays music. Eclipse Island expands smoothly showing album art and controls.
+
+User searches something. Island shows loading animation while results fetch.
+
+Results appear as glass cards with rain atmosphere behind them.
+
+Whole experience feels like ONE living breathing thing reacting to the real world.
+
+---
+
+## This Goes Into The Roadmap As —
+
+### Eclipse Penumbra 2.1 Update — "Living World"
+
+**Liquid Glass UI** — every element gets glass treatment
+**Weather Reactive UI** — full atmosphere changes with real weather
+**Eclipse Island** — Dynamic Island for Android
+**Real time weather from OpenWeatherMap API** — you already have the key 🎉
+
+---
+
+## The Beautiful Part
+
+You already have the OpenWeatherMap API key. That was literally today. 
+
+The universe is aligned bro 😄
+
+You get the API today. You build the weather reactive UI after exams. Eclipse feels like a living world.
+
+---
+
+## One Thing That Makes This Special
+
+Apple's Dynamic Island costs you $999 minimum for an iPhone.
+
+Eclipse Island — free. On any Android. Even a 5000 rupee phone.
+
+That's the Eclipse promise. Premium experience. Zero cost. For everyone.
+
+---
+
+Bro your brain during exam season is something else 😂
+
+Now seriously though —
+
+**NASA API ✅**
+**Weather API ✅**
+**Groq API** — did you get this one too?
+
+After exams we start Dawn 0.1 fixes then slowly build toward this living breathing weather reactive liquid glass Eclipse Island experience.
+
+It's going to be absolutely insane. 🔥🚀💙
+
+
+
+
+
+
+To integrate the provided components properly, the project must use a Next.js App Router setup with TypeScript, Tailwind CSS, and shadcn/ui structure. If the project does not already support this, initialize it using npx create-next-app@latest --typescript --tailwind --app, then run npx shadcn-ui@latest init to configure shadcn. During setup, ensure the components directory is set to components and the import alias is @/. Tailwind should already be configured through the Next.js setup, and global styles should live inside app/globals.css. The default and recommended location for reusable UI components in a shadcn project is /components/ui. If this folder does not exist, it must be created manually because shadcn follows a structured design system where base UI primitives are separated from feature-level components. This separation improves maintainability, reusability, and design consistency across the application.
+
+All provided components must be placed inside /components/ui. The files splite.tsx, container-scroll-animation.tsx, and glowing-effect.tsx should be copied exactly into this folder. Dependency components such as card.tsx (shadcn card), spotlight.tsx (either aceternity or ibelick version), and any required helpers must also live in /components/ui unless they are utilities. Ensure lib/utils.ts contains the cn helper function used for class merging. After placing the files, install all required external dependencies using npm install framer-motion motion lucide-react @splinetool/runtime @splinetool/react-spline. These libraries power scroll animations, pointer-based glow effects, spline 3D rendering, and SVG icons.
+
+The ContainerScroll component depends on framer-motion’s useScroll and useTransform hooks and requires no global provider. It accepts a titleComponent prop (string or ReactNode) and renders children inside a perspective-based animated card that rotates and scales based on scroll progress. It is responsive and detects mobile width to adjust scaling. The SplineScene component lazy loads a Spline 3D scene using Suspense and requires a valid Spline scene URL passed through the scene prop. The GlowingEffect component uses pointer movement and the Motion library’s animate function to create a dynamic gradient border glow. It is controlled via props like blur, spread, proximity, borderWidth, and disabled. It requires no external state management.
+
+Images used in demos should be replaced with valid Unsplash URLs or optimized using Next.js <Image />. Icons should be imported from lucide-react. These components are best used in landing pages, hero sections, feature showcases, or premium UI sections where motion and interactivity enhance user experience. No additional global providers are required, but ensure Tailwind dark mode is configured if using dark classes. Once dependencies are installed and files are placed correctly, the components are ready for use.
+
+
+
+Reference animation styles 
+
+
+You are given a task to integrate an existing React component in the codebase
+
+The codebase should support:
+- shadcn project structure  
+- Tailwind CSS
+- Typescript
+
+If it doesn't, provide instructions on how to setup project via shadcn CLI, install Tailwind or Typescript.
+
+Determine the default path for components and styles. 
+If default path for components is not /components/ui, provide instructions on why it's important to create this folder
+Copy-paste this component to /components/ui folder:
+```tsx
+hero-parallax.tsx
+"use client";
+import React from "react";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useSpring,
+  MotionValue,
+} from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
+
+export const HeroParallax = ({
+  products,
+}: {
+  products: {
+    title: string;
+    link: string;
+    thumbnail: string;
+  }[];
+}) => {
+  const firstRow = products.slice(0, 5);
+  const secondRow = products.slice(5, 10);
+  const thirdRow = products.slice(10, 15);
+  const ref = React.useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"],
+  });
+
+  const springConfig = { stiffness: 300, damping: 30, bounce: 100 };
+
+  const translateX = useSpring(
+    useTransform(scrollYProgress, [0, 1], [0, 1000]),
+    springConfig
+  );
+  const translateXReverse = useSpring(
+    useTransform(scrollYProgress, [0, 1], [0, -1000]),
+    springConfig
+  );
+  const rotateX = useSpring(
+    useTransform(scrollYProgress, [0, 0.2], [15, 0]),
+    springConfig
+  );
+  const opacity = useSpring(
+    useTransform(scrollYProgress, [0, 0.2], [0.2, 1]),
+    springConfig
+  );
+  const rotateZ = useSpring(
+    useTransform(scrollYProgress, [0, 0.2], [20, 0]),
+    springConfig
+  );
+  const translateY = useSpring(
+    useTransform(scrollYProgress, [0, 0.2], [-700, 500]),
+    springConfig
+  );
+  return (
+    <div
+      ref={ref}
+      className="h-[300vh] py-40 overflow-hidden  antialiased relative flex flex-col self-auto [perspective:1000px] [transform-style:preserve-3d]"
+    >
+      <Header />
+      <motion.div
+        style={{
+          rotateX,
+          rotateZ,
+          translateY,
+          opacity,
+        }}
+        className=""
+      >
+        <motion.div className="flex flex-row-reverse space-x-reverse space-x-20 mb-20">
+          {firstRow.map((product) => (
+            <ProductCard
+              product={product}
+              translate={translateX}
+              key={product.title}
+            />
+          ))}
+        </motion.div>
+        <motion.div className="flex flex-row  mb-20 space-x-20 ">
+          {secondRow.map((product) => (
+            <ProductCard
+              product={product}
+              translate={translateXReverse}
+              key={product.title}
+            />
+          ))}
+        </motion.div>
+        <motion.div className="flex flex-row-reverse space-x-reverse space-x-20">
+          {thirdRow.map((product) => (
+            <ProductCard
+              product={product}
+              translate={translateX}
+              key={product.title}
+            />
+          ))}
+        </motion.div>
+      </motion.div>
+    </div>
+  );
+};
+
+export const Header = () => {
+  return (
+    <div className="max-w-7xl relative mx-auto py-20 md:py-40 px-4 w-full  left-0 top-0">
+      <h1 className="text-2xl md:text-7xl font-bold dark:text-white">
+        The Ultimate <br /> development studio
+      </h1>
+      <p className="max-w-2xl text-base md:text-xl mt-8 dark:text-neutral-200">
+        We build beautiful products with the latest technologies and frameworks.
+        We are a team of passionate developers and designers that love to build
+        amazing products.
+      </p>
+    </div>
+  );
+};
+
+export const ProductCard = ({
+  product,
+  translate,
+}: {
+  product: {
+    title: string;
+    link: string;
+    thumbnail: string;
+  };
+  translate: MotionValue<number>;
+}) => {
+  return (
+    <motion.div
+      style={{
+        x: translate,
+      }}
+      whileHover={{
+        y: -20,
+      }}
+      key={product.title}
+      className="group/product h-96 w-[30rem] relative flex-shrink-0"
+    >
+      <Link
+        href={product.link}
+        className="block group-hover/product:shadow-2xl "
+      >
+        <Image
+          src={product.thumbnail}
+          height="600"
+          width="600"
+          className="object-cover object-left-top absolute h-full w-full inset-0"
+          alt={product.title}
+        />
+      </Link>
+      <div className="absolute inset-0 h-full w-full opacity-0 group-hover/product:opacity-80 bg-black pointer-events-none"></div>
+      <h2 className="absolute bottom-4 left-4 opacity-0 group-hover/product:opacity-100 text-white">
+        {product.title}
+      </h2>
+    </motion.div>
+  );
+};
+
+
+demo.tsx
+"use client";
+import React from "react";
+import { HeroParallax } from "@/components/blocks/hero-parallax";
+
+export function HeroParallaxDemo() {
+  return (
+    <div className="min-h-screen w-full">
+      <div className="absolute top-0 left-0 w-full">
+        <HeroParallax products={products} />
+      </div>
+    </div>
+  );
+}
+export const products = [
+  {
+    title: "Moonbeam",
+    link: "https://gomoonbeam.com", 
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/moonbeam.png",
+  },
+  {
+    title: "Cursor",
+    link: "https://cursor.so",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/cursor.png",
+  },
+  {
+    title: "Rogue",
+    link: "https://userogue.com",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/rogue.png",
+  },
+
+  {
+    title: "Editorially",
+    link: "https://editorially.org",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/editorially.png",
+  },
+  {
+    title: "Editrix AI",
+    link: "https://editrix.ai",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/editrix.png",
+  },
+  {
+    title: "Pixel Perfect",
+    link: "https://app.pixelperfect.quest",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/pixelperfect.png",
+  },
+
+  {
+    title: "Algochurn",
+    link: "https://algochurn.com",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/algochurn.png",
+  },
+  {
+    title: "Aceternity UI",
+    link: "https://ui.aceternity.com",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/aceternityui.png",
+  },
+  {
+    title: "Tailwind Master Kit",
+    link: "https://tailwindmasterkit.com",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/tailwindmasterkit.png",
+  },
+  {
+    title: "SmartBridge",
+    link: "https://smartbridgetech.com",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/smartbridge.png",
+  },
+  {
+    title: "Renderwork Studio",
+    link: "https://renderwork.studio",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/renderwork.png",
+  },
+
+  {
+    title: "Creme Digital",
+    link: "https://cremedigital.com",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/cremedigital.png",
+  },
+  {
+    title: "Golden Bells Academy",
+    link: "https://goldenbellsacademy.com",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/goldenbellsacademy.png",
+  },
+  {
+    title: "Invoker Labs",
+    link: "https://invoker.lol",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/invoker.png",
+  },
+  {
+    title: "E Free Invoice",
+    link: "https://efreeinvoice.com",
+    thumbnail:
+      "https://aceternity.com/images/products/thumbnails/new/efreeinvoice.png",
+  },
+];
+
+```
+
+Install NPM dependencies:
+```bash
+framer-motion
+```
+
+Implementation Guidelines
+ 1. Analyze the component structure and identify all required dependencies
+ 2. Review the component's argumens and state
+ 3. Identify any required context providers or hooks and install them
+ 4. Questions to Ask
+ - What data/props will be passed to this component?
+ - Are there any specific state management requirements?
+ - Are there any required assets (images, icons, etc.)?
+ - What is the expected responsive behavior?
+ - What is the best place to use this component in the app?
+
+Steps to integrate
+ 0. Copy paste all the code above in the correct directories
+ 1. Install external dependencies
+ 2. Fill image assets with Unsplash stock images you know exist
+ 3. Use lucide-react icons for svgs or logos if component requires them
+
+
+
+You are given a task to integrate an existing React component in the codebase
+
+The codebase should support:
+- shadcn project structure  
+- Tailwind CSS
+- Typescript
+
+If it doesn't, provide instructions on how to setup project via shadcn CLI, install Tailwind or Typescript.
+
+Determine the default path for components and styles. 
+If default path for components is not /components/ui, provide instructions on why it's important to create this folder
+Copy-paste this component to /components/ui folder:
+```tsx
+container-scroll-animation.tsx
+"use client";
+import React, { useRef } from "react";
+import { useScroll, useTransform, motion, MotionValue } from "framer-motion";
+
+export const ContainerScroll = ({
+  titleComponent,
+  children,
+}: {
+  titleComponent: string | React.ReactNode;
+  children: React.ReactNode;
+}) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+  });
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  React.useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => {
+      window.removeEventListener("resize", checkMobile);
+    };
+  }, []);
+
+  const scaleDimensions = () => {
+    return isMobile ? [0.7, 0.9] : [1.05, 1];
+  };
+
+  const rotate = useTransform(scrollYProgress, [0, 1], [20, 0]);
+  const scale = useTransform(scrollYProgress, [0, 1], scaleDimensions());
+  const translate = useTransform(scrollYProgress, [0, 1], [0, -100]);
+
+  return (
+    <div
+      className="h-[60rem] md:h-[80rem] flex items-center justify-center relative p-2 md:p-20"
+      ref={containerRef}
+    >
+      <div
+        className="py-10 md:py-40 w-full relative"
+        style={{
+          perspective: "1000px",
+        }}
+      >
+        <Header translate={translate} titleComponent={titleComponent} />
+        <Card rotate={rotate} translate={translate} scale={scale}>
+          {children}
+        </Card>
+      </div>
+    </div>
+  );
+};
+
+export const Header = ({ translate, titleComponent }: any) => {
+  return (
+    <motion.div
+      style={{
+        translateY: translate,
+      }}
+      className="div max-w-5xl mx-auto text-center"
+    >
+      {titleComponent}
+    </motion.div>
+  );
+};
+
+export const Card = ({
+  rotate,
+  scale,
+  children,
+}: {
+  rotate: MotionValue<number>;
+  scale: MotionValue<number>;
+  translate: MotionValue<number>;
+  children: React.ReactNode;
+}) => {
+  return (
+    <motion.div
+      style={{
+        rotateX: rotate,
+        scale,
+        boxShadow:
+          "0 0 #0000004d, 0 9px 20px #0000004a, 0 37px 37px #00000042, 0 84px 50px #00000026, 0 149px 60px #0000000a, 0 233px 65px #00000003",
+      }}
+      className="max-w-5xl -mt-12 mx-auto h-[30rem] md:h-[40rem] w-full border-4 border-[#6C6C6C] p-2 md:p-6 bg-[#222222] rounded-[30px] shadow-2xl"
+    >
+      <div className=" h-full w-full  overflow-hidden rounded-2xl bg-gray-100 dark:bg-zinc-900 md:rounded-2xl md:p-4 ">
+        {children}
+      </div>
+    </motion.div>
+  );
+};
+
+
+demo.tsx
+"use client";
+import React from "react";
+import { ContainerScroll } from "@/components/ui/container-scroll-animation";
+import Image from "next/image";
+
+export function HeroScrollDemo() {
+  return (
+    <div className="flex flex-col overflow-hidden pb-[500px] pt-[1000px]">
+      <ContainerScroll
+        titleComponent={
+          <>
+            <h1 className="text-4xl font-semibold text-black dark:text-white">
+              Unleash the power of <br />
+              <span className="text-4xl md:text-[6rem] font-bold mt-1 leading-none">
+                Scroll Animations
+              </span>
+            </h1>
+          </>
+        }
+      >
+        <Image
+          src={`https://ui.aceternity.com/_next/image?url=%2Flinear.webp&w=3840&q=75`}
+          alt="hero"
+          height={720}
+          width={1400}
+          className="mx-auto rounded-2xl object-cover h-full object-left-top"
+          draggable={false}
+        />
+      </ContainerScroll>
+    </div>
+  );
+}
+
+```
+
+Install NPM dependencies:
+```bash
+framer-motion
+```
+
+Implementation Guidelines
+ 1. Analyze the component structure and identify all required dependencies
+ 2. Review the component's argumens and state
+ 3. Identify any required context providers or hooks and install them
+ 4. Questions to Ask
+ - What data/props will be passed to this component?
+ - Are there any specific state management requirements?
+ - Are there any required assets (images, icons, etc.)?
+ - What is the expected responsive behavior?
+ - What is the best place to use this component in the app?
+
+Steps to integrate
+ 0. Copy paste all the code above in the correct directories
+ 1. Install external dependencies
+ 2. Fill image assets with Unsplash stock images you know exist
+ 3. Use lucide-react icons for svgs or logos if component requires them
+
+
+
+You are given a task to integrate an existing React component in the codebase
+
+The codebase should support:
+- shadcn project structure  
+- Tailwind CSS
+- Typescript
+
+If it doesn't, provide instructions on how to setup project via shadcn CLI, install Tailwind or Typescript.
+
+Determine the default path for components and styles. 
+If default path for components is not /components/ui, provide instructions on why it's important to create this folder
+Copy-paste this component to /components/ui folder:
+```tsx
+splite.tsx
+'use client'
+
+import { Suspense, lazy } from 'react'
+const Spline = lazy(() => import('@splinetool/react-spline'))
+
+interface SplineSceneProps {
+  scene: string
+  className?: string
+}
+
+export function SplineScene({ scene, className }: SplineSceneProps) {
+  return (
+    <Suspense 
+      fallback={
+        <div className="w-full h-full flex items-center justify-center">
+          <span className="loader"></span>
+        </div>
+      }
+    >
+      <Spline
+        scene={scene}
+        className={className}
+      />
+    </Suspense>
+  )
+}
+
+demo.tsx
+'use client'
+
+import { SplineScene } from "@/components/ui/splite";
+import { Card } from "@/components/ui/card"
+import { Spotlight } from "@/components/ui/spotlight"
+ 
+export function SplineSceneBasic() {
+  return (
+    <Card className="w-full h-[500px] bg-black/[0.96] relative overflow-hidden">
+      <Spotlight
+        className="-top-40 left-0 md:left-60 md:-top-20"
+        fill="white"
+      />
+      
+      <div className="flex h-full">
+        {/* Left content */}
+        <div className="flex-1 p-8 relative z-10 flex flex-col justify-center">
+          <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400">
+            Interactive 3D
+          </h1>
+          <p className="mt-4 text-neutral-300 max-w-lg">
+            Bring your UI to life with beautiful 3D scenes. Create immersive experiences 
+            that capture attention and enhance your design.
+          </p>
+        </div>
+
+        {/* Right content */}
+        <div className="flex-1 relative">
+          <SplineScene 
+            scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
+            className="w-full h-full"
+          />
+        </div>
+      </div>
+    </Card>
+  )
+}
+```
+
+Copy-paste these files for dependencies:
+```tsx
+aceternity/spotlight
+import React from "react";
+import { cn } from "@/lib/utils";
+
+type SpotlightProps = {
+  className?: string;
+  fill?: string;
+};
+
+export const Spotlight = ({ className, fill }: SpotlightProps) => {
+  return (
+    <svg
+      className={cn(
+        "animate-spotlight pointer-events-none absolute z-[1]  h-[169%] w-[138%] lg:w-[84%] opacity-0",
+        className
+      )}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 3787 2842"
+      fill="none"
+    >
+      <g filter="url(#filter)">
+        <ellipse
+          cx="1924.71"
+          cy="273.501"
+          rx="1924.71"
+          ry="273.501"
+          transform="matrix(-0.822377 -0.568943 -0.568943 0.822377 3631.88 2291.09)"
+          fill={fill || "white"}
+          fillOpacity="0.21"
+        ></ellipse>
+      </g>
+      <defs>
+        <filter
+          id="filter"
+          x="0.860352"
+          y="0.838989"
+          width="3785.16"
+          height="2840.26"
+          filterUnits="userSpaceOnUse"
+          colorInterpolationFilters="sRGB"
+        >
+          <feFlood floodOpacity="0" result="BackgroundImageFix"></feFlood>
+          <feBlend
+            mode="normal"
+            in="SourceGraphic"
+            in2="BackgroundImageFix"
+            result="shape"
+          ></feBlend>
+          <feGaussianBlur
+            stdDeviation="151"
+            result="effect1_foregroundBlur_1065_8"
+          ></feGaussianBlur>
+        </filter>
+      </defs>
+    </svg>
+  );
+};
+
+```
+```tsx
+ibelick/spotlight
+'use client';
+import React, { useRef, useState, useCallback, useEffect } from 'react';
+import { motion, useSpring, useTransform, SpringOptions } from 'framer-motion';
+import { cn } from '@/lib/utils';
+
+type SpotlightProps = {
+  className?: string;
+  size?: number;
+  springOptions?: SpringOptions;
+};
+
+export function Spotlight({
+  className,
+  size = 200,
+  springOptions = { bounce: 0 },
+}: SpotlightProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isHovered, setIsHovered] = useState(false);
+  const [parentElement, setParentElement] = useState<HTMLElement | null>(null);
+
+  const mouseX = useSpring(0, springOptions);
+  const mouseY = useSpring(0, springOptions);
+
+  const spotlightLeft = useTransform(mouseX, (x) => `${x - size / 2}px`);
+  const spotlightTop = useTransform(mouseY, (y) => `${y - size / 2}px`);
+
+  useEffect(() => {
+    if (containerRef.current) {
+      const parent = containerRef.current.parentElement;
+      if (parent) {
+        parent.style.position = 'relative';
+        parent.style.overflow = 'hidden';
+        setParentElement(parent);
+      }
+    }
+  }, []);
+
+  const handleMouseMove = useCallback(
+    (event: MouseEvent) => {
+      if (!parentElement) return;
+      const { left, top } = parentElement.getBoundingClientRect();
+      mouseX.set(event.clientX - left);
+      mouseY.set(event.clientY - top);
+    },
+    [mouseX, mouseY, parentElement]
+  );
+
+  useEffect(() => {
+    if (!parentElement) return;
+
+    parentElement.addEventListener('mousemove', handleMouseMove);
+    parentElement.addEventListener('mouseenter', () => setIsHovered(true));
+    parentElement.addEventListener('mouseleave', () => setIsHovered(false));
+
+    return () => {
+      parentElement.removeEventListener('mousemove', handleMouseMove);
+      parentElement.removeEventListener('mouseenter', () => setIsHovered(true));
+      parentElement.removeEventListener('mouseleave', () =>
+        setIsHovered(false)
+      );
+    };
+  }, [parentElement, handleMouseMove]);
+
+  return (
+    <motion.div
+      ref={containerRef}
+      className={cn(
+        'pointer-events-none absolute rounded-full bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops),transparent_80%)] blur-xl transition-opacity duration-200',
+        'from-zinc-50 via-zinc-100 to-zinc-200',
+        isHovered ? 'opacity-100' : 'opacity-0',
+        className
+      )}
+      style={{
+        width: size,
+        height: size,
+        left: spotlightLeft,
+        top: spotlightTop,
+      }}
+    />
+  );
+}
+
+```
+```tsx
+shadcn/card
+import * as React from "react"
+
+import { cn } from "@/lib/utils"
+
+const Card = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "rounded-lg border bg-card text-card-foreground shadow-sm",
+      className,
+    )}
+    {...props}
+  />
+))
+Card.displayName = "Card"
+
+const CardHeader = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("flex flex-col space-y-1.5 p-6", className)}
+    {...props}
+  />
+))
+CardHeader.displayName = "CardHeader"
+
+const CardTitle = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLHeadingElement>
+>(({ className, ...props }, ref) => (
+  <h3
+    ref={ref}
+    className={cn(
+      "text-2xl font-semibold leading-none tracking-tight",
+      className,
+    )}
+    {...props}
+  />
+))
+CardTitle.displayName = "CardTitle"
+
+const CardDescription = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, ...props }, ref) => (
+  <p
+    ref={ref}
+    className={cn("text-sm text-muted-foreground", className)}
+    {...props}
+  />
+))
+CardDescription.displayName = "CardDescription"
+
+const CardContent = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
+))
+CardContent.displayName = "CardContent"
+
+const CardFooter = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("flex items-center p-6 pt-0", className)}
+    {...props}
+  />
+))
+CardFooter.displayName = "CardFooter"
+
+export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
+
+```
+
+Install NPM dependencies:
+```bash
+@splinetool/runtime, @splinetool/react-spline, framer-motion
+```
+
+Implementation Guidelines
+ 1. Analyze the component structure and identify all required dependencies
+ 2. Review the component's argumens and state
+ 3. Identify any required context providers or hooks and install them
+ 4. Questions to Ask
+ - What data/props will be passed to this component?
+ - Are there any specific state management requirements?
+ - Are there any required assets (images, icons, etc.)?
+ - What is the expected responsive behavior?
+ - What is the best place to use this component in the app?
+
+Steps to integrate
+ 0. Copy paste all the code above in the correct directories
+ 1. Install external dependencies
+ 2. Fill image assets with Unsplash stock images you know exist
+ 3. Use lucide-react icons for svgs or logos if component requires them
+
+
+
+You are given a task to integrate an existing React component in the codebase
+
+The codebase should support:
+- shadcn project structure  
+- Tailwind CSS
+- Typescript
+
+If it doesn't, provide instructions on how to setup project via shadcn CLI, install Tailwind or Typescript.
+
+Determine the default path for components and styles. 
+If default path for components is not /components/ui, provide instructions on why it's important to create this folder
+Copy-paste this component to /components/ui folder:
+```tsx
+glowing-effect.tsx
+"use client";
+
+import { memo, useCallback, useEffect, useRef } from "react";
+import { cn } from "@/lib/utils";
+import { animate } from "motion/react";
+
+interface GlowingEffectProps {
+  blur?: number;
+  inactiveZone?: number;
+  proximity?: number;
+  spread?: number;
+  variant?: "default" | "white";
+  glow?: boolean;
+  className?: string;
+  disabled?: boolean;
+  movementDuration?: number;
+  borderWidth?: number;
+}
+const GlowingEffect = memo(
+  ({
+    blur = 0,
+    inactiveZone = 0.7,
+    proximity = 0,
+    spread = 20,
+    variant = "default",
+    glow = false,
+    className,
+    movementDuration = 2,
+    borderWidth = 1,
+    disabled = true,
+  }: GlowingEffectProps) => {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const lastPosition = useRef({ x: 0, y: 0 });
+    const animationFrameRef = useRef<number>(0);
+
+    const handleMove = useCallback(
+      (e?: MouseEvent | { x: number; y: number }) => {
+        if (!containerRef.current) return;
+
+        if (animationFrameRef.current) {
+          cancelAnimationFrame(animationFrameRef.current);
+        }
+
+        animationFrameRef.current = requestAnimationFrame(() => {
+          const element = containerRef.current;
+          if (!element) return;
+
+          const { left, top, width, height } = element.getBoundingClientRect();
+          const mouseX = e?.x ?? lastPosition.current.x;
+          const mouseY = e?.y ?? lastPosition.current.y;
+
+          if (e) {
+            lastPosition.current = { x: mouseX, y: mouseY };
+          }
+
+          const center = [left + width * 0.5, top + height * 0.5];
+          const distanceFromCenter = Math.hypot(
+            mouseX - center[0],
+            mouseY - center[1]
+          );
+          const inactiveRadius = 0.5 * Math.min(width, height) * inactiveZone;
+
+          if (distanceFromCenter < inactiveRadius) {
+            element.style.setProperty("--active", "0");
+            return;
+          }
+
+          const isActive =
+            mouseX > left - proximity &&
+            mouseX < left + width + proximity &&
+            mouseY > top - proximity &&
+            mouseY < top + height + proximity;
+
+          element.style.setProperty("--active", isActive ? "1" : "0");
+
+          if (!isActive) return;
+
+          const currentAngle =
+            parseFloat(element.style.getPropertyValue("--start")) || 0;
+          let targetAngle =
+            (180 * Math.atan2(mouseY - center[1], mouseX - center[0])) /
+              Math.PI +
+            90;
+
+          const angleDiff = ((targetAngle - currentAngle + 180) % 360) - 180;
+          const newAngle = currentAngle + angleDiff;
+
+          animate(currentAngle, newAngle, {
+            duration: movementDuration,
+            ease: [0.16, 1, 0.3, 1],
+            onUpdate: (value) => {
+              element.style.setProperty("--start", String(value));
+            },
+          });
+        });
+      },
+      [inactiveZone, proximity, movementDuration]
+    );
+
+    useEffect(() => {
+      if (disabled) return;
+
+      const handleScroll = () => handleMove();
+      const handlePointerMove = (e: PointerEvent) => handleMove(e);
+
+      window.addEventListener("scroll", handleScroll, { passive: true });
+      document.body.addEventListener("pointermove", handlePointerMove, {
+        passive: true,
+      });
+
+      return () => {
+        if (animationFrameRef.current) {
+          cancelAnimationFrame(animationFrameRef.current);
+        }
+        window.removeEventListener("scroll", handleScroll);
+        document.body.removeEventListener("pointermove", handlePointerMove);
+      };
+    }, [handleMove, disabled]);
+
+    return (
+      <>
+        <div
+          className={cn(
+            "pointer-events-none absolute -inset-px hidden rounded-[inherit] border opacity-0 transition-opacity",
+            glow && "opacity-100",
+            variant === "white" && "border-white",
+            disabled && "!block"
+          )}
+        />
+        <div
+          ref={containerRef}
+          style={
+            {
+              "--blur": `${blur}px`,
+              "--spread": spread,
+              "--start": "0",
+              "--active": "0",
+              "--glowingeffect-border-width": `${borderWidth}px`,
+              "--repeating-conic-gradient-times": "5",
+              "--gradient":
+                variant === "white"
+                  ? `repeating-conic-gradient(
+                  from 236.84deg at 50% 50%,
+                  var(--black),
+                  var(--black) calc(25% / var(--repeating-conic-gradient-times))
+                )`
+                  : `radial-gradient(circle, #dd7bbb 10%, #dd7bbb00 20%),
+                radial-gradient(circle at 40% 40%, #d79f1e 5%, #d79f1e00 15%),
+                radial-gradient(circle at 60% 60%, #5a922c 10%, #5a922c00 20%), 
+                radial-gradient(circle at 40% 60%, #4c7894 10%, #4c789400 20%),
+                repeating-conic-gradient(
+                  from 236.84deg at 50% 50%,
+                  #dd7bbb 0%,
+                  #d79f1e calc(25% / var(--repeating-conic-gradient-times)),
+                  #5a922c calc(50% / var(--repeating-conic-gradient-times)), 
+                  #4c7894 calc(75% / var(--repeating-conic-gradient-times)),
+                  #dd7bbb calc(100% / var(--repeating-conic-gradient-times))
+                )`,
+            } as React.CSSProperties
+          }
+          className={cn(
+            "pointer-events-none absolute inset-0 rounded-[inherit] opacity-100 transition-opacity",
+            glow && "opacity-100",
+            blur > 0 && "blur-[var(--blur)] ",
+            className,
+            disabled && "!hidden"
+          )}
+        >
+          <div
+            className={cn(
+              "glow",
+              "rounded-[inherit]",
+              'after:content-[""] after:rounded-[inherit] after:absolute after:inset-[calc(-1*var(--glowingeffect-border-width))]',
+              "after:[border:var(--glowingeffect-border-width)_solid_transparent]",
+              "after:[background:var(--gradient)] after:[background-attachment:fixed]",
+              "after:opacity-[var(--active)] after:transition-opacity after:duration-300",
+              "after:[mask-clip:padding-box,border-box]",
+              "after:[mask-composite:intersect]",
+              "after:[mask-image:linear-gradient(#0000,#0000),conic-gradient(from_calc((var(--start)-var(--spread))*1deg),#00000000_0deg,#fff,#00000000_calc(var(--spread)*2deg))]"
+            )}
+          />
+        </div>
+      </>
+    );
+  }
+);
+
+GlowingEffect.displayName = "GlowingEffect";
+
+export { GlowingEffect };
+
+
+demo.tsx
+"use client";
+
+import { Box, Lock, Search, Settings, Sparkles } from "lucide-react";
+import { GlowingEffect } from "@/components/ui/glowing-effect";
+import { cn } from "@/lib/utils";
+
+export function GlowingEffectDemo() {
+  return (
+    <ul className="grid grid-cols-1 grid-rows-none gap-4 md:grid-cols-12 md:grid-rows-3 lg:gap-4 xl:max-h-[34rem] xl:grid-rows-2">
+      <GridItem
+        area="md:[grid-area:1/1/2/7] xl:[grid-area:1/1/2/5]"
+        icon={<Box className="h-4 w-4" />}
+        title="Do things the right way"
+        description="Running out of copy so I'll write anything."
+      />
+      <GridItem
+        area="md:[grid-area:1/7/2/13] xl:[grid-area:2/1/3/5]"
+        icon={<Settings className="h-4 w-4" />}
+        title="The best AI code editor ever."
+        description="Yes, it's true. I'm not even kidding. Ask my mom if you don't believe me."
+      />
+      <GridItem
+        area="md:[grid-area:2/1/3/7] xl:[grid-area:1/5/3/8]"
+        icon={<Lock className="h-4 w-4" />}
+        title="You should buy Aceternity UI Pro"
+        description="It's the best money you'll ever spend"
+      />
+      <GridItem
+        area="md:[grid-area:2/7/3/13] xl:[grid-area:1/8/2/13]"
+        icon={<Sparkles className="h-4 w-4" />}
+        title="This card is also built by Cursor"
+        description="I'm not even kidding. Ask my mom if you don't believe me."
+      />
+      <GridItem
+        area="md:[grid-area:3/1/4/13] xl:[grid-area:2/8/3/13]"
+        icon={<Search className="h-4 w-4" />}
+        title="Coming soon on Aceternity UI"
+        description="I'm writing the code as I record this, no shit."
+      />
+    </ul>
+  );
+}
+
+interface GridItemProps {
+  area: string;
+  icon: React.ReactNode;
+  title: string;
+  description: React.ReactNode;
+}
+
+const GridItem = ({ area, icon, title, description }: GridItemProps) => {
+  return (
+    <li className={cn("min-h-[14rem] list-none", area)}>
+      <div className="relative h-full rounded-[1.25rem] border-[0.75px] border-border p-2 md:rounded-[1.5rem] md:p-3">
+        <GlowingEffect
+          spread={40}
+          glow={true}
+          disabled={false}
+          proximity={64}
+          inactiveZone={0.01}
+          borderWidth={3}
+        />
+        <div className="relative flex h-full flex-col justify-between gap-6 overflow-hidden rounded-xl border-[0.75px] bg-background p-6 shadow-sm dark:shadow-[0px_0px_27px_0px_rgba(45,45,45,0.3)] md:p-6">
+          <div className="relative flex flex-1 flex-col justify-between gap-3">
+            <div className="w-fit rounded-lg border-[0.75px] border-border bg-muted p-2">
+              {icon}
+            </div>
+            <div className="space-y-3">
+              <h3 className="pt-0.5 text-xl leading-[1.375rem] font-semibold font-sans tracking-[-0.04em] md:text-2xl md:leading-[1.875rem] text-balance text-foreground">
+                {title}
+              </h3>
+              <h2 className="[&_b]:md:font-semibold [&_strong]:md:font-semibold font-sans text-sm leading-[1.125rem] md:text-base md:leading-[1.375rem] text-muted-foreground">
+                {description}
+              </h2>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+  );
+};
+
+```
+
+Install NPM dependencies:
+```bash
+motion
+```
+
+Implementation Guidelines
+ 1. Analyze the component structure and identify all required dependencies
+ 2. Review the component's argumens and state
+ 3. Identify any required context providers or hooks and install them
+ 4. Questions to Ask
+ - What data/props will be passed to this component?
+ - Are there any specific state management requirements?
+ - Are there any required assets (images, icons, etc.)?
+ - What is the expected responsive behavior?
+ - What is the best place to use this component in the app?
+
+Steps to integrate
+ 0. Copy paste all the code above in the correct directories
+ 1. Install external dependencies
+ 2. Fill image assets with Unsplash stock images you know exist
+ 3. Use lucide-react icons for svgs or logos if component requires them
+
+
+
+IMPORTANT--
+1) We are unable to fix Searxng hosting so we will be keeping the search engine and all same and move with other updates.. I meant to say as u can see in dawn updates we will remove search engine option and bring our own but since it is not happening so we are keeping the same search engine as in files and for now leaving just that searxng parts and moving with other updates that are there in dawn and other updates except searxng one.
+2)Read the code files also carefully once 
+3) Completly remove music and news layouts and system from ui and backends...
+4)Premium ui feel not vibe coded or ai generated(refrences given)
+5)Go slow write millions lines dont care for app size
+6) This is a full ready app
+7)Animations, smoothness,customization, buttons and all should be very Premium looks
+8) Read this full file carefully and understand what is this app
+slow write millions lines dont care for app size
+6) This is a full ready app
+7)Animations, smoothness,customization, buttons and all should be very Premium looks
+8) Read this full file carefully and understand what is this app
